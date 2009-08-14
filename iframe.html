@@ -1,0 +1,46 @@
+<html>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <head>
+        <title>Trial Tool Console</title>
+        <style>
+            body {
+                font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+                font-size: 11px;
+            }
+            
+            .log-time {
+                color: #314362;
+                font-weight: bold;
+            }
+            
+            .log-object, .log-array {
+                cursor: pointer;
+                color: blue;
+            }
+            
+            .log-opened > span {
+                border: dotted 1px BLACK;
+                border-bottom: none;
+                background-color: #F1F4F7;
+                padding-bottom: 1px;
+            }
+            
+            .log-opened ul, ol {
+                border: dotted 1px BLACK;
+                background-color: #F1F4F7;
+                padding: 0 0 0 2%;
+                margin: 0 3px 5px 0;
+                color: black;
+                list-style: square;
+            }
+        </style>
+        <script type = "text/javascript" src= "lib/jquery/jquery-1.4.2.min.js">
+        </script>
+        <script type = "text/javascript" src= "js/ConsoleHelper.js">
+        </script>
+    </head>
+    <body>
+        <div id = "console">
+        </div>
+    </body>
+</html>
