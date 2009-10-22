@@ -1,1 +1,104 @@
-My GitHub Page
+<html>
+    <head>
+        <title>Trial Tool</title>
+        <link rel="stylesheet" type="text/css" href="lib/jquery/css/smoothness/jquery-ui-1.8.2.custom.css">
+        </link>
+        <link rel="stylesheet" type="text/css" href="lib/codemirror/css/docs.css">
+        </link>
+        <link rel="stylesheet" type="text/css" href="TrialTool.css">
+        </link>
+    </head>
+    <body>
+        <div id = "header">
+            <div style ="float:left; line-height : 1.5em; font-size : 2em;margin : 0 0 0 1em; color : WHITE; font-family : Garamond; font-style :italic; font-weight : bolder;">
+                Trial Tool
+            </div>
+            <ul id = "toolbar">
+                <li>
+                    <a href = "#run" id = "run">Run Snippet</a>
+                </li>
+                <li>
+                    <a href = "#getDependencies" id = "getDependencies">Load Pre-requisites</a>
+                </li>
+                <li>
+                    <a href = "#viewdocs" id = "viewdocs">View Output</a>
+                </li>
+                <li>
+                    <a href = "#clearConsole" id = "clearConsole">Clear Console</a>
+                </li>
+            </ul>
+            <div class = "clear">
+            </div>
+        </div>
+        <div id = "content" class = "clear">
+            <div id = "top-pane">
+                <div id = "examples">
+                    <div id = "examples-title">
+                        Examples 
+                    </div>
+                    <ul id = "example-sets" class = "example-set">
+                    </ul>
+                </div>
+                <div id = "vertical-thumb">
+                </div>
+                <div class = "code-area">
+                    <div id = "formattedCode" class = "prettyprint">
+                    </div>
+                    <textarea border = "0" id = "code">
+                        /***************************************\
+                        | Select a module from the Examples list|
+                        \***************************************/
+                        //This is the code area//
+                    </textarea>
+                </div>
+                <div class = "clear">
+                </div>
+            </div>
+            <div id = "horizontal-thumb">
+            </div>
+            <div id = "console" class = "clear">
+                <div id = "docs">
+                    <h2>Using this tool</h2>
+                    This tool showcases the capabilities of various API and libraries. 
+                    You can load example snippets, modify them and run it to see the results right here. 
+                    <br/>
+                    <h5>The toolbar buttons</h5>
+                    <ul>
+                        <li>
+                            <b>Run Snippet : </b>
+                            This button runs the code that is in the code area at the top right. The code area is editable and you can modify the examples and run them.
+                        </li>
+                        <li>
+                            <b>Load Pre-requisites : </b>
+                            Some snippets require of other snippets to be run. This button adds those dependencies in the code area. 
+                        </li>
+                        <li>
+                            <b>View Output / View Docs</b>
+                            Toggle to view the documentation for the current API or the output window here. 
+                        </li>
+                        <li>
+                            <b>Clear Console</b>Clears the output window
+                        </li>
+                    </ul>
+                    <p>
+                        If you are an API developer and want to use this tool to showcase your libraries, you can use this tool. The examples loaded are configrable. 
+                    </p>
+                </div>
+                <iframe frameBorder = 0 src = "iframe.html" id = "console-iframe">
+                </iframe>
+            </div>
+        </div>
+        <div id = "footer">
+        </div>
+        <script src="lib/jquery/jquery-1.4.2.min.js" type="text/javascript">
+        </script>
+        <script src="lib/jquery/jquery-ui-1.8.2.custom.min.js" type="text/javascript">
+        </script>
+        <script src="lib/codemirror/js/codemirror.js" type="text/javascript">
+        </script>
+        <script src="lib/codemirror/js/mirrorframe.js" type="text/javascript">
+        </script>
+        <script src="js/TrialTool.js" type=text/javascript>
+        </script>
+    </body>
+</html>
