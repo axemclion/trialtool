@@ -1,3 +1,7 @@
+html {
+    height: 100%;
+}
+
 body {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -6,6 +10,8 @@ body {
     overflow: auto;
     background-color: #314362;
     margin: 0 1% 0 1%;
+    height: 100%;
+    min-height: 100%;
 }
 
 div#header {
@@ -171,7 +177,8 @@ div#console {
 
 div#docs {
     background-color: white;
-    width: 100%;
+    width: 98%;
+	padding : 1%;
     height: 98%;
 	overflow-y : auto;
 }
