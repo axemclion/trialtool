@@ -16,8 +16,10 @@ function write(){
     }
     text.innerHTML = ["<span class='log-time'>[", new Date().toLocaleTimeString(), "]&nbsp;</span>"].join("") + msg.join(" ");
     document.getElementById("console").appendChild(text);
+    window.scroll(0, $("#console").height());
     return text;
-}
+};
+document.write = write;
 
 function writeError(e){
     write(e.name + ": " + e.message).style.color = "RED";
