@@ -29,6 +29,8 @@ var TrialTool = (function(){
             $("div#docs").html(docs.html());
             
         }
+        //$("div#docs").attr("scrollTop", 0);
+        
         e.preventDefault();
     });
     
@@ -148,7 +150,8 @@ var TrialTool = (function(){
                     return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
                 },
                 "success": function(data){
-                    $("#example-sets").append($(data));
+                    $("div#example-sets").append($(data));
+                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
                 },
                 "error": function(data, errorString, m){
                     alert("Could not load " + url);
