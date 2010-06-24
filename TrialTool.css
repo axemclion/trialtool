@@ -169,7 +169,7 @@ div#docs {
     padding: 1%;
 }
 
-div#console iframe {
+iframe#console-iframe {
     display: none;
     width: 100%;
     border: none;
