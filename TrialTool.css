@@ -84,12 +84,14 @@ a.example-set-name {
     padding: 0 0 0 1em;
     text-decoration: none;
     color: black;
+    cursor: pointer;
     background-image: url('images/opened.png');
     background-repeat: no-repeat;
     background-position: left center;
 }
 
 a.example-name {
+    cursor: pointer;
     margin: 0.2em 0 0 0;
     padding: 0 1em 0 1em;
     text-decoration: none;
