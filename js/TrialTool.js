@@ -18,17 +18,19 @@ var TrialTool = (function(){
     $("a.example-name").live("click", function(e){
         var example = $(this).parent();
         showCode(example.children("textarea.script").val());
-        $("div#docs").html(example.children("div.example-docs").html());
         currentSelection = example;
-        e.preventDefault();
-        
         $("a.example-name-selected").removeClass("example-name-selected");
         $(this).addClass("example-name-selected");
-        
-        
+        var docs = example.children(".example-docs");
+        if (docs.get(0).nodeName === "LINK") {
+            $("div#docs").html($(docs.attr("href")).html());
+        }
+        else {
+            $("div#docs").html(docs.html());
+            
+        }
+        e.preventDefault();
     });
-    
-    
     
     $("ul#toolbar a").live("click", function(e){
         switch ($(this).attr("id")) {

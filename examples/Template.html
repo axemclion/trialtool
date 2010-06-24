@@ -9,17 +9,15 @@
                     <li class = "example">
                         <a class = "example-name" href = "#">Example 1.1</a>
                         <div class = "example-docs">
-                            Example documentation
+                            This is an inline documentation for example 1.1
                         </div>
                         <script type="text/javascript">
-                            document.write("Execute this");
+                            document.write("Executed example 1.1");
                         </script>
                     </li>
                     <li class = "example">
                         <a class = "example-name">Example 1.2</a>
-                        <div class = "example-docs">
-                            Example documentation
-                        </div>
+                        <link class = "example-docs" href = "div#example1-2">
                         <script type="text/javascript">
                             document.write("Execute this");
                         </script>
@@ -45,9 +43,16 @@
                 <script type="text/javascript">
                     document.write("Example 3");
                 </script>
-                <div class = "example-docs">
-                </div>
+                <link class = "example-docs" href="div#example1-1"/>
             </li>
         </ul>
+        <div>
+            <div id = "example1-2">
+                This is the documentation for section 1.2. This documentation is from a div that is linked using the link element
+            </div>
+            <div id = "example3">
+                This is the documentation for example 3
+            </div>
+        </div>
     </body>
 </html>
