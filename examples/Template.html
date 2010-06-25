@@ -3,23 +3,29 @@
     </head>
     <body>
         <ul>
-            <li class="example-set">
+            <li class="example-set" id = "example1">
                 <a class = "example-set-name" href = "#">Example Set 1</a>
                 <ul>
-                    <li class = "example">
+                    <li class = "example" id = "example1-1">
                         <a class = "example-name" href = "#">Example 1.1</a>
                         <div class = "example-docs">
-                            This is an inline documentation for example 1.1
+                            This is an inline documentation for example 1.1.
                         </div>
                         <script type="text/javascript">
+                            var a = 10;
+                            document.write("Value of a is ", a);
                             document.write("Executed example 1.1");
                         </script>
                     </li>
-                    <li class = "example">
+                    <li class = "example" depends = "example1-1">
                         <a class = "example-name">Example 1.2</a>
-                        <link class = "example-docs" href = "div#example1-2">
+                        <link class = "example-docs" href = "div#doc-example1-2">
                         <script type="text/javascript">
-                            document.write("Execute this");
+                            // This example depends on example 1.1 and requires example 1.1 to be executed first.
+                            // Click on the "Load Pre-requisites" button at the top to load code for example 1 also
+                            var b = 20;
+                            document.write("Sum of a and b is ", a + b);
+                            document.write("Executed example 1.2");
                         </script>
                     </li>
                 </ul>
@@ -35,24 +41,38 @@
                             </iframe>
                         </div>
                         <script type="text/javascript">
-                            document.write("Execute this");
+                            var x = {
+                                "a": 10,
+                                "b": 20,
+                                "c": [10, 20]
+                            };
+                            var y = [10, 20, {
+                                "a": 10
+                            }];
+                            document.write("X is ", x, "and Y is ", y);
+                            document.write("Executed example 2.1");
                         </script>
                     </li>
                 </ul>
             </li>
-            <li class = "example">
+            <li class = "example" depends = "example1">
                 <a class = "example-name">Example 3</a>
                 <script type="text/javascript">
-                    document.write("Example 3");
+                    // This requires the entire Example 1 set to be run. 
+                    // Hence, example 1.1 and example 1.2 should run so that variables are declared
+                    document.write("Product of a and b is ", a * b);
+                    document.write("Example 3 executed");
                 </script>
-                <link class = "example-docs" href="div#example3"/>
+                <link class = "example-docs" href="div#doc-example3"/>
             </li>
         </ul>
         <div>
-            <div id = "example1-2">
-                This is the documentation for section 1.2. This documentation is from a div that is linked using the link element
+            <div id = "doc-example1-2">
+                This is the documentation for section 1.2. This documentation is from a div that is linked using the link element.
+                <br/>
+                This example depends on Example 1.1
             </div>
-            <div id = "example3">
+            <div id = "doc-example3">
                 This is the documentation for example 3. It also has an embedded iFrame.
                 <iframe style ="width : 100%; height : 300px" src = "http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html#sec8">
                 </iframe>
