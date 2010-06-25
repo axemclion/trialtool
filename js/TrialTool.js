@@ -92,29 +92,39 @@ var TrialTool = (function(){
         function add(a){
             result = (a ? result.concat(a) : result);
         };
-        console.group(node.get(0));
+        //console.group(node.get(0));
+        
+        // Getting the dependencies of the ancestors of this node
+        var dependents = [];
+        $.each(node.parent("ul").parents("li.example-set"), function(){
+            dependents.push("," + ($(this).attr("depends") || ""));
+        });
         // Getting the current node's dependencies
-        var dependents = (node.parent("ul").parent("li.example-set").attr("depends") || "") + "," + (node.attr("depends") || "");
-        $.each(dependents.split(","), function(i){
-            console.log("Depends = ", i, this);
-            add(getDependencies(String(this)));
+        dependents.push("," + (node.attr("depends") || ""));
+        
+        $.each(dependents.join("").split(","), function(i){
+            var currentDepends = String(this);
+            if (currentDepends) {
+                //console.log("Depends = ", i, currentDepends);
+                add(getDependencies(currentDepends));
+            }
         });
         
         // Adding self to the result
         if (node.hasClass("example-set")) {
             $(node.children("ul").children("li.example, li.example-set")).each(function(i){
-                console.log("Child node = ", i, this);
+                //console.log("Child node = ", i, this);
                 add(getDependencies($(this)));
             });
         }
         else {
-            console.log("Added result ", node);
+            //console.log("Added result ", node);
             result.push({
                 "module": node.children("a.example-name").html(),
                 "code": node.children("textarea.script").val()
             });
         }
-        console.groupEnd();
+        //console.groupEnd();
         return result;
     };
     
