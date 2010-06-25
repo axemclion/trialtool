@@ -35,6 +35,7 @@ var TrialTool = (function(){
     });
     
     $("ul#toolbar a").live("click", function(e){
+        e.preventDefault();
         switch ($(this).attr("id")) {
             case "viewdocs":
                 showDocs(($("div#docs").css("display") === "none"));
@@ -49,7 +50,7 @@ var TrialTool = (function(){
                 break;
             case "getDependencies":
                 var code = [];
-                visitedNodes = {};
+                visitedNodes = [];
                 $.each(getDependencies(currentSelection), function(){
                     code.push("/*" + this.module + "*/\n");
                     code.push(this.code);
@@ -58,8 +59,7 @@ var TrialTool = (function(){
                 showCode(code.join(" "));
                 break;
         };
-        e.preventDefault();
-    });
+            });
     
     var runCode = function(code){
         var iframe = $("#console-iframe").get(0).contentWindow;
@@ -74,40 +74,47 @@ var TrialTool = (function(){
         }
     }
     
-    var visitedNodes = {};
     var getDependencies = function(example){
         var result = [];
-        var node = (example && typeof(example) === "string") ? $("li.#" + example + ":first") : example;
-        if (!node || node.attr("id") in visitedNodes) {
+        var node = (example && typeof(example) === "string") ? $("li.#" + example.replace(/^\s+|\s+$/g, '') + ":first") : example;
+        
+        // If the node does not exist, simply return
+        if (!node) 
             return;
+        // if node exists in the visited nodes array, then also return
+        for (var i = 0; i < visitedNodes.length; i++) {
+            if (node.get(0) === visitedNodes[i]) 
+                return;
         }
-        visitedNodes[node.attr("id")] = '';
+        
+        // Node is visited the first time, so let us process this node
+        visitedNodes.push(node.get(0));
         function add(a){
             result = (a ? result.concat(a) : result);
         };
-        
+        console.group(node.get(0));
         // Getting the current node's dependencies
         var dependents = (node.parent("ul").parent("li.example-set").attr("depends") || "") + "," + (node.attr("depends") || "");
-        //console.log(node.get(0), " depends on ", dependents, visitedNodes);
-        $.each(dependents.split(","), function(){
+        $.each(dependents.split(","), function(i){
+            console.log("Depends = ", i, this);
             add(getDependencies(String(this)));
         });
         
         // Adding self to the result
         if (node.hasClass("example-set")) {
-            $(node.children("li.example")).each(function(){
-                add(getDependencies($(this).attr("id")))
-            });
-            $(node.children("ul").children("li.example")).each(function(){
-                add(getDependencies($(this).attr("id")))
+            $(node.children("ul").children("li.example, li.example-set")).each(function(i){
+                console.log("Child node = ", i, this);
+                add(getDependencies($(this)));
             });
         }
         else {
+            console.log("Added result ", node);
             result.push({
                 "module": node.children("a.example-name").html(),
                 "code": node.children("textarea.script").val()
             });
         }
+        console.groupEnd();
         return result;
     };
     
