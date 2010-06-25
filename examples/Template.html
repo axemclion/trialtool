@@ -17,7 +17,7 @@
                             document.write("Executed example 1.1");
                         </script>
                     </li>
-                    <li class = "example" depends = "example1-1">
+                    <li class = "example" id = "example1-2" depends = "example1-1">
                         <a class = "example-name">Example 1.2</a>
                         <link class = "example-docs" href = "div#doc-example1-2">
                         <script type="text/javascript">
@@ -30,7 +30,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="example-set">
+            <li class="example-set" id = "example2" depends = "example1">
                 <a class = "example-set-name">Example Set 2 </a>
                 <ul>
                     <li class = "example">
@@ -53,9 +53,28 @@
                             document.write("Executed example 2.1");
                         </script>
                     </li>
+                    <li class = "example-set" id = "example-2-2">
+                        <a class = "example-set-name">Example Set 2.2</a>
+                        <ul>
+                            <li class = "example">
+                                <a class = "example-name">Example 2.2.1</a>
+                                <script type = "text/javascript">
+                                    document.write("Executed 2.2.1");
+                                </script>
+                                <link class = "example-docs" href = "div#doc-example1-2"/>
+                            </li>
+                            <li class = "example">
+                                <a class = "example-name">Example 2.2.2</a>
+                                <script type = "text/javascript">
+                                    document.write("Executed 2.2.2");
+                                </script>
+                                <link class = "example-docs" href = "div#doc-example1-2"/>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
-            <li class = "example" depends = "example1">
+            <li class = "example" depends = "example2">
                 <a class = "example-name">Example 3</a>
                 <script type="text/javascript">
                     // This requires the entire Example 1 set to be run. 
