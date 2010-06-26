@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-family: "Lucida Grande", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", Tahoma, sans-serif;
     font-size: 12px;
     padding: 0;
     max-width: 100%;
@@ -26,8 +26,7 @@ div#content {
 }
 
 div#footer {
-    width: 100%;
-    height: 1%;
+    display: none;
 }
 
 div#top-pane {
@@ -175,19 +174,51 @@ div#console {
     height: 48%;
 }
 
-div#docs {
+div#console-toolbar{
+	float : left;
+	width : 2%;
+	height: 100%;
+}
+
+div#console-toolbar ul{
+	margin : 0;
+	padding : 0; 
+	list-style : none;
+	align : right;
+}
+
+li#console-tab-output{
+	background-image : url('images/sprite.png');
+	background-position: 0px -40px; 
+	height : 132px;
+	background-repeat : no-repeat;
+}
+
+li#console-tab-docs{
+	background-image : url('images/sprite.png');
+	background-position: 0px -182px; 
+	height : 132px;
+	background-repeat : no-repeat;	
+}
+
+div#console-content{
+	float : left;
+	width : 98%;
+	height : 100%;
     background-color: white;
-    width: 98%;
-	padding : 1%;
-    height: 98%;
-	overflow-y : auto;
+	overflow : hidden;
+}
+
+div#docs {
+	padding : 0 1% 0 1%;
+	height : 100%;
+	overflow : auto;
 }
 
 iframe#console-iframe {
-    background-color: white;
     display: none;
-    width: 100%;
     border: none;
+    width: 100%;
     height: 100%;
 }
 

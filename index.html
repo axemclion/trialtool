@@ -56,37 +56,49 @@
             <div id = "horizontal-thumb">
             </div>
             <div id = "console" class = "clear">
-                <div id = "docs">
-                    <div>
-                        <h2>Using this tool</h2>
-                        This tool showcases the capabilities of various API and libraries. 
-                        You can load example snippets, modify them and run it to see the results right here. 
-                        <br/>
-                        <h5>The toolbar buttons</h5>
-                        <ul>
-                            <li>
-                                <b>Run Snippet : </b>
-                                This button runs the code that is in the code area at the top right. The code area is editable and you can modify the examples and run them.
-                            </li>
-                            <li>
-                                <b>Load Pre-requisites : </b>
-                                Some snippets require of other snippets to be run. This button adds those dependencies in the code area. 
-                            </li>
-                            <li>
-                                <b>View Output / View Docs</b>
-                                Toggle to view the documentation for the current API or the output window here. 
-                            </li>
-                            <li>
-                                <b>Clear Console</b>Clears the output window
-                            </li>
-                        </ul>
-                        <p>
-                            If you are an API developer and want to use this tool to showcase your libraries, you can use this tool. The examples loaded are configrable. 
-                        </p>
-                    </div>
+                <div id = "console-toolbar">
+                    <ul>
+                        <li id = "console-tab-docs">
+                            &nbsp;
+                        </li>
+                        <li id = "console-tab-output">
+                            &nbsp;
+                        </li>
+                    </ul>
                 </div>
-                <iframe frameBorder = 0 src = "iframe.html" id = "console-iframe">
-                </iframe>
+                <div id = "console-content">
+                    <div id = "docs">
+                        <div>
+                            <h2>Using this tool</h2>
+                            This tool showcases the capabilities of various API and libraries. 
+                            You can load example snippets, modify them and run it to see the results right here. 
+                            <br/>
+                            <h5>The toolbar buttons</h5>
+                            <ul>
+                                <li>
+                                    <b>Run Snippet : </b>
+                                    This button runs the code that is in the code area at the top right. The code area is editable and you can modify the examples and run them.
+                                </li>
+                                <li>
+                                    <b>Load Pre-requisites : </b>
+                                    Some snippets require of other snippets to be run. This button adds those dependencies in the code area. 
+                                </li>
+                                <li>
+                                    <b>View Output / View Docs</b>
+                                    Toggle to view the documentation for the current API or the output window here. 
+                                </li>
+                                <li>
+                                    <b>Clear Console</b>Clears the output window
+                                </li>
+                            </ul>
+                            <p>
+                                If you are an API developer and want to use this tool to showcase your libraries, you can use this tool. The examples loaded are configrable. 
+                            </p>
+                        </div>
+                    </div>
+                    <iframe frameBorder = 0 src = "iframe.html" id = "console-iframe">
+                    </iframe>
+                </div>
             </div>
         </div>
         <div id = "footer">
