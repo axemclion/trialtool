@@ -34,7 +34,7 @@ var TrialTool = (function(){
         e.preventDefault();
     });
     
-    $("ul#toolbar>li>a, #console-toolbar li").live("click", function(e){
+    $("ul#toolbar>li>a, #console-toolbar>li>a").live("click", function(e){
         e.preventDefault();
         switch ($(this).attr("id")) {
             case "viewdocs":
@@ -142,8 +142,8 @@ var TrialTool = (function(){
     var showDocs = function(flag){
         $("#console-iframe").toggle(!flag);
         $("div#docs").toggle(flag);
-        $("div#console-toolbar>ul>li").css("background-image", "url('images/tab-closed.png')");
-        $("li#view" + (flag ? "docs" : "output")).css("background-image", "url('images/tab.png')");
+        $("ul#console-toolbar>li.tab").css("background-image", "url('images/tab-closed.png')");
+        $("a#view" + (flag ? "docs" : "output")).parent().css("background-image", "url('images/tab.png')");
     }
     
     /**

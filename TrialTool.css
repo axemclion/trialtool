@@ -185,27 +185,34 @@ div#console {
 	margin : 0.5% 0 0 0;
 }
 
-div#console-toolbar{
+ul#console-toolbar{
 	float : left;
 	width : 2%;
 	height: 100%;
 	overflow : hidden;
-}
-
-div#console-toolbar ul{
 	margin : 0;
 	padding : 0; 
 	list-style : none;
-	width : 30px;
-	float : right;
+	align : right;
 }
 
-div#console-toolbar li{
+ul#console-toolbar li.tab{
+	height : 135px;
+	width : 32px;
 	background-image : url('images/tab-closed.png');
-	height : 120px;
 	background-repeat : no-repeat;
+	float : right;
+	clear : both;
+	margin : 10px 0 -10px 0;	
+}
+
+ul#console-toolbar a{
+    background-repeat :no-repeat;
+	display : block;
+	width : 100%;
+	height : 100%;
 	cursor : pointer;
-	padding : 20px 0 0 7px;
+	margin :12px 0 0 8px;
 }
 
 div#console-content{
