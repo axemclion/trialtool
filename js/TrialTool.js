@@ -34,19 +34,21 @@ var TrialTool = (function(){
         e.preventDefault();
     });
     
-    $("ul#toolbar a").live("click", function(e){
+    $("ul#toolbar>li>a, #console-toolbar>li>a").live("click", function(e){
         e.preventDefault();
         switch ($(this).attr("id")) {
             case "viewdocs":
-                showDocs(($("div#docs").css("display") === "none"));
+                showDocs(true);
                 break;
-            case "clearConsole":
-                runCode("document.getElementById('console').innerHTML = '';")
+            case "viewoutput":
+                showDocs(false);
                 break;
             case "run":
                 showDocs(false);
                 runCode(editor.getCode());
-                
+                break;
+            case "clearConsole":
+                runCode("document.getElementById('console').innerHTML = '';")
                 break;
             case "getDependencies":
                 var code = [];
@@ -74,6 +76,7 @@ var TrialTool = (function(){
         }
     }
     
+    var visitedNodes = [];
     var getDependencies = function(example){
         var result = [];
         var node = (example && typeof(example) === "string") ? $("li.#" + example.replace(/^\s+|\s+$/g, '') + ":first") : example;
@@ -139,20 +142,79 @@ var TrialTool = (function(){
     var showDocs = function(flag){
         $("#console-iframe").toggle(!flag);
         $("div#docs").toggle(flag);
-        $("a#viewdocs").html((flag && "View Output") || "View Docs");
+        $("ul#console-toolbar>li.tab").css("background-image", "url('images/tab-closed.png')");
+        $("a#view" + (flag ? "docs" : "output")).parent().css("background-image", "url('images/tab.png')");
     }
+    
+    /**
+     * Function to resize the panes
+     * @param {Object} elems
+     * @param {Object} d
+     */
+    var resizePanes = function(elems, d){
+        var axis = {
+            "a": "top",
+            "b": "height"
+        };
+        if (d == "x") {
+            axis = {
+                "a": "left",
+                "b": "width"
+            };
+        }
+        var divider = elems[1].offset()[axis.a] - elems[1].parent().offset()[axis.a];
+        elems[0].css(axis.b, divider);
+        elems[2].css(axis.b, elems[1].parent()[axis.b].call(elems[1].parent()) - (divider + elems[1][axis.b].call(elems[1])));
+        elems[2].css(axis.a, divider + elems[1][axis.b].call(elems[1]));
+        $("div#vertical-thumb").height($("div#vertical-thumb").parent().height());
+    }
+    
+    // Left right resizing
+    $("div#vertical-thumb").draggable({
+        "iframeFix": true,
+        "axis": "x",
+        "containment": [200, 0, window.innerWidth - 300, window.innerHeight],
+        "drag": function(event, ui){
+            resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
+        },
+        "stop": function(event, ui){
+            resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
+        },
+    }).height($("div#vertical-thumb").parent().height());
+    
+    // Top-Down resizing
+    $("div#horizontal-thumb").draggable({
+        "iframeFix": true,
+        "axis": "y",
+        "containment": [0, 200, window.innerWidth, window.innerHeight - 200],
+        "drag": function(event, ui){
+            resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
+        },
+        "stop": function(event, ui){
+            resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
+        }
+    });
+    
+    $(window).resize(function(){
+        resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
+        resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
+    });
     
     /**
      * Uses codemirror to initialize a code editor
      */
-    var editor = new CodeMirror(CodeMirror.replace("formattedCode"), {
-        parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-        path: "lib/codemirror/js/",
-        stylesheet: "lib/codemirror/css/jscolors.css",
-        content: document.getElementById("code").value,
-        height: "100%"
+    var editor = null;
+    $.getScript("lib/codemirror/js/codemirror.js", function(){
+        $.getScript("lib/codemirror/js/mirrorframe.js", function(){
+            editor = new CodeMirror(CodeMirror.replace("formattedCode"), {
+                parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+                path: "lib/codemirror/js/",
+                stylesheet: "lib/codemirror/css/jscolors.css",
+                content: document.getElementById("code").value,
+                height: "100%"
+            });
+        });
     });
-    
     return {
         /**
          * Adds a new example to
