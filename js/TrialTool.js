@@ -149,13 +149,23 @@ var TrialTool = (function(){
     /**
      * Uses codemirror to initialize a code editor
      */
-    var editor = new CodeMirror(CodeMirror.replace("formattedCode"), {
-        parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-        path: "lib/codemirror/js/",
-        stylesheet: "lib/codemirror/css/jscolors.css",
-        content: document.getElementById("code").value,
-        height: "100%"
+    var editor = null;
+    $.getScript("lib/codemirror/js/codemirror.js", function(){
+        $.getScript("lib/codemirror/js/mirrorframe.js", function(){
+            editor = new CodeMirror(CodeMirror.replace("formattedCode"), {
+                parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+                path: "lib/codemirror/js/",
+                stylesheet: "lib/codemirror/css/jscolors.css",
+                content: document.getElementById("code").value,
+                height: "100%"
+            });
+        });
     });
+    
+    
+    
+    
+    
     
     return {
         /**

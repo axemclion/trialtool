@@ -43,6 +43,7 @@ div#vertical-thumb {
     float: left;
     width: 0.5%;
     height: 100%;
+    cursor: col-resize;
 }
 
 div.code-area {
@@ -133,15 +134,17 @@ ul#toolbar li {
 }
 
 ul#toolbar a {
+    background-repeat: no-repeat;
+    background-position: left center;
     padding: 0.5em 0 0.5em 0;
     display: block;
     text-decoration: none;
     color: BLACK;
-    width: 100%;
+    font-weight: bold;
     background-image: -moz-linear-gradient(top, #FFFFFF, #A3B7CB); /* FF3.6 */
   	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #FFFFFF),color-stop(1, #A3B7CB)); /* Saf4+, Chrome */
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A3B7CB'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A3B7CB')"; /* IE8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A3B7CB')"; /* IE8 */	
 }
 
 ul#toolbar a:hover {
@@ -166,6 +169,7 @@ textarea#code {
 div#horizontal-thumb {
     height: 1%;
     font-size: 0px;
+	cursor : row-resize;
 }
 
 div#console {
