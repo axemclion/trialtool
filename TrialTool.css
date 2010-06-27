@@ -30,6 +30,7 @@ div#footer {
 
 div#top-pane {
     height: 50%;
+    overflow: hidden;
 }
 
 div#examples {
@@ -44,9 +45,12 @@ div#vertical-thumb {
     width: 0.5%;
     height: 100%;
     cursor: col-resize;
+    position: absolute;
+    left: 25%;
+    /*background-color: YELLOW;*/
 }
 
-div.code-area {
+div#code-area {
     float: right;
     width: 75%;
     height: 100%;
@@ -56,7 +60,7 @@ div.code-area {
 div#examples-title {
     padding: 0 1em 0 1em;
     line-height: 2em;
-    height: 7%;
+    height: 8%;
     overflow: hidden;
     background-color: #ABCEDF;
 }
@@ -65,7 +69,7 @@ div#example-sets {
     overflow-y: scroll;
     overflow-x: hidden;
     margin: 0;
-    padding: 1% 0 0 1%;
+    padding: 0.5em 0 0 0.5em;
     height: 91%;
 }
 
@@ -81,7 +85,7 @@ div#example-sets * {
 
 li.example-set, li.example {
     margin: 0;
-    padding: 0 0 0 3%;
+    padding: 0 0 0 0.5em;
     list-style: none;
     display: block;
 }
@@ -168,13 +172,17 @@ textarea#code {
 
 div#horizontal-thumb {
     height: 1%;
+	width : 98%;
     font-size: 0px;
 	cursor : row-resize;
+	position : absolute;
+	/*background-color: RED;*/
 }
 
 div#console {
     clear: both;
     height: 48%;
+	margin : 0.5% 0 0 0;
 }
 
 div#console-toolbar{
