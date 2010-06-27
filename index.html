@@ -19,9 +19,6 @@
                     <a href = "#getDependencies" id = "getDependencies">Load Pre-requisites</a>
                 </li>
                 <li>
-                    <a href = "#viewdocs" id = "viewdocs">View Output</a>
-                </li>
-                <li>
                     <a href = "#clearConsole" id = "clearConsole">Clear Console</a>
                 </li>
             </ul>
@@ -58,11 +55,11 @@
             <div id = "console" class = "clear">
                 <div id = "console-toolbar">
                     <ul>
-                        <li id = "console-tab-docs">
-                            &nbsp;
+                        <li id = "viewdocs">
+                            <div style ="background-image : url('images/reference.png'); background-repeat : no-repeat; width : 30px; height : 150px;"/>
                         </li>
-                        <li id = "console-tab-output">
-                            &nbsp;
+                        <li id = "viewoutput">
+                        <div style ="background-image : url('images/output.png'); background-repeat : no-repeat; width : 30px; height : 150px;"/>
                         </li>
                     </ul>
                 </div>
@@ -82,10 +79,6 @@
                                 <li>
                                     <b>Load Pre-requisites : </b>
                                     Some snippets require of other snippets to be run. This button adds those dependencies in the code area. 
-                                </li>
-                                <li>
-                                    <b>View Output / View Docs</b>
-                                    Toggle to view the documentation for the current API or the output window here. 
                                 </li>
                                 <li>
                                     <b>Clear Console</b>Clears the output window

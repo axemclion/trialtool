@@ -34,19 +34,21 @@ var TrialTool = (function(){
         e.preventDefault();
     });
     
-    $("ul#toolbar a").live("click", function(e){
+    $("ul#toolbar>li>a, #console-toolbar li").live("click", function(e){
         e.preventDefault();
         switch ($(this).attr("id")) {
             case "viewdocs":
-                showDocs(($("div#docs").css("display") === "none"));
+                showDocs(true);
                 break;
-            case "clearConsole":
-                runCode("document.getElementById('console').innerHTML = '';")
+            case "viewoutput":
+                showDocs(false);
                 break;
             case "run":
                 showDocs(false);
                 runCode(editor.getCode());
-                
+                break;
+            case "clearConsole":
+                runCode("document.getElementById('console').innerHTML = '';")
                 break;
             case "getDependencies":
                 var code = [];
@@ -74,6 +76,7 @@ var TrialTool = (function(){
         }
     }
     
+    var visitedNodes = [];
     var getDependencies = function(example){
         var result = [];
         var node = (example && typeof(example) === "string") ? $("li.#" + example.replace(/^\s+|\s+$/g, '') + ":first") : example;
@@ -139,7 +142,8 @@ var TrialTool = (function(){
     var showDocs = function(flag){
         $("#console-iframe").toggle(!flag);
         $("div#docs").toggle(flag);
-        $("a#viewdocs").html((flag && "View Output") || "View Docs");
+        $("div#console-toolbar>ul>li").css("background-image", "url('images/tab-closed.png')");
+        $("li#view" + (flag ? "docs" : "output")).css("background-image", "url('images/tab.png')");
     }
     
     /**
