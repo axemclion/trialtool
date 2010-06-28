@@ -22,15 +22,15 @@ var TrialTool = (function(){
         $("a.example-name-selected").removeClass("example-name-selected");
         $(this).addClass("example-name-selected");
         var docs = example.children(".example-docs");
-        if (docs.get(0).nodeName === "LINK") {
-            $("div#docs").html($(docs.attr("href")).html());
+        if (docs.length > 0) {
+            if (docs.get(0).nodeName === "LINK") {
+                $("div#docs").html($(docs.attr("href")).html());
+            }
+            else {
+                $("div#docs").html(docs.html());
+                
+            }
         }
-        else {
-            $("div#docs").html(docs.html());
-            
-        }
-        //$("div#docs").attr("scrollTop", 0);
-        
         e.preventDefault();
     });
     
