@@ -63,6 +63,9 @@ div#examples-title {
     height: 8%;
     overflow: hidden;
     background-color: #ABCEDF;
+    border-radius-topleft: 5px;
+    -webkit-border-radius-topleft: 5px;
+    -moz-border-radius-topleft: 5px;
 }
 
 div#example-sets {
@@ -132,7 +135,6 @@ ul#toolbar {
 ul#toolbar li {
     float: left;
     margin: 0.5em 1em 0 0em;
-    background-color: #A3B7CB;
     width: 12em;
     text-align: center;
 }
@@ -145,6 +147,9 @@ ul#toolbar a {
     text-decoration: none;
     color: BLACK;
     font-weight: bold;
+    -moz-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
     background-image: -moz-linear-gradient(top, #FFFFFF, #A3B7CB); /* FF3.6 */
   	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #FFFFFF),color-stop(1, #A3B7CB)); /* Saf4+, Chrome */
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A3B7CB'); /* IE6,IE7 */
