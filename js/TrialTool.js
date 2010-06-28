@@ -22,15 +22,15 @@ var TrialTool = (function(){
         $("a.example-name-selected").removeClass("example-name-selected");
         $(this).addClass("example-name-selected");
         var docs = example.children(".example-docs");
-        if (docs.get(0).nodeName === "LINK") {
-            $("div#docs").html($(docs.attr("href")).html());
+        if (docs.length > 0) {
+            if (docs.get(0).nodeName === "LINK") {
+                $("div#docs").html($(docs.attr("href")).html());
+            }
+            else {
+                $("div#docs").html(docs.html());
+                
+            }
         }
-        else {
-            $("div#docs").html(docs.html());
-            
-        }
-        //$("div#docs").attr("scrollTop", 0);
-        
         e.preventDefault();
     });
     
@@ -179,7 +179,7 @@ var TrialTool = (function(){
         },
         "stop": function(event, ui){
             resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
-        },
+        }
     }).height($("div#vertical-thumb").parent().height());
     
     // Top-Down resizing
@@ -195,10 +195,11 @@ var TrialTool = (function(){
         }
     });
     
-    $(window).resize(function(){
+    var resizeAllPanes = function(){
         resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
         resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
-    });
+    }
+    resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
     
     /**
      * Uses codemirror to initialize a code editor
