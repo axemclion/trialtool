@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    overflow: auto;
 }
 
 body {
@@ -7,7 +8,6 @@ body {
     font-size: 12px;
     padding: 0;
     max-width: 100%;
-    overflow: auto;
     background-color: #343026;
     margin: 0 1% 0 1%;
     height: 100%;
@@ -31,12 +31,12 @@ div#footer {
 div#top-pane {
     height: 50%;
     overflow: hidden;
+    margin-bottom: 0.5%;
 }
 
 div#examples {
     width: 24.5%;
     float: left;
-    background-color: white;
     height: 100%;
 }
 
@@ -74,6 +74,7 @@ div#example-sets {
     margin: 0;
     padding: 0.5em 0 0 0.5em;
     height: 91%;
+    background-color: white;
 }
 
 div#example-sets ul {
@@ -146,21 +147,16 @@ ul#toolbar a {
     display: block;
     text-decoration: none;
     color: BLACK;
+    background-color: #E6E6E6;
     font-weight: bold;
     -moz-border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    background-image: -moz-linear-gradient(top, #FFFFFF, #A3B7CB); /* FF3.6 */
-  	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #FFFFFF),color-stop(1, #A3B7CB)); /* Saf4+, Chrome */
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A3B7CB'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A3B7CB')"; /* IE8 */	
 }
 
 ul#toolbar a:hover {
-    background-image: -moz-linear-gradient(top, #FFFFFF, #A9DBF6); /* FF3.6 */
-  	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #FFFFFF),color-stop(1, #A9DBF6)); /* Saf4+, Chrome */
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A9DBF6'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#A9DBF6')"; /* IE8 */
+    background-color: #CCCCCC;
+    color: WHITE;
 }
 
 div#formattedCode {
@@ -177,61 +173,60 @@ textarea#code {
 
 div#horizontal-thumb {
     height: 1%;
-	width : 98%;
+    width: 98%;
+    top: 50%;
     font-size: 0px;
-	cursor : row-resize;
-	position : absolute;
-	/*background-color: RED;*/
+    cursor: row-resize;
+    position: absolute;
 }
 
 div#console {
     clear: both;
     height: 48%;
-	margin : 0.5% 0 0 0;
 }
 
-ul#console-toolbar{
-	float : left;
-	width : 2%;
-	height: 100%;
-	overflow : hidden;
-	margin : 0;
-	padding : 0; 
-	list-style : none;
-	align : right;
+ul#console-toolbar {
+    float: left;
+    width: 2%;
+    height: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align: right;
 }
 
-ul#console-toolbar li.tab{
-	height : 135px;
-	width : 32px;
-	background-image : url('images/tab-closed.png');
-	background-repeat : no-repeat;
-	float : right;
-	clear : both;
-	margin : 10px 0 -10px 0;	
+ul#console-toolbar li.tab {
+    height: 135px;
+    width: 32px;
+    background-image: url('images/tab-closed.png');
+    background-repeat: no-repeat;
+    float: right;
+    clear: both;
+    margin: 10px 0 -10px 0;
 }
 
-ul#console-toolbar a{
-    background-repeat :no-repeat;
-	display : block;
-	width : 100%;
-	height : 100%;
-	cursor : pointer;
-	margin :12px 0 0 8px;
+ul#console-toolbar a {
+    background-repeat: no-repeat;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    margin: 12px 0 0 8px;
 }
 
-div#console-content{
-	float : left;
-	width : 98%;
-	height : 100%;
+div#console-content {
+    float: left;
+    width: 98%;
+    height: 100%;
     background-color: white;
-	overflow : hidden;
+    overflow: hidden;
 }
 
 div#docs {
-	padding : 0 1% 0 1%;
-	height : 100%;
-	overflow : auto;
+    padding: 0 1% 0 1%;
+    height: 100%;
+    overflow: auto;
 }
 
 iframe#console-iframe {

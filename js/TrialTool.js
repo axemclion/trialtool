@@ -179,7 +179,7 @@ var TrialTool = (function(){
         },
         "stop": function(event, ui){
             resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
-        },
+        }
     }).height($("div#vertical-thumb").parent().height());
     
     // Top-Down resizing
@@ -195,10 +195,11 @@ var TrialTool = (function(){
         }
     });
     
-    $(window).resize(function(){
+    var resizeAllPanes = function(){
         resizePanes([$("div#examples"), $("div#vertical-thumb"), $("div#code-area")], "x");
         resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
-    });
+    }
+    resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
     
     /**
      * Uses codemirror to initialize a code editor
