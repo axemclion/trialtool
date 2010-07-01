@@ -141,8 +141,8 @@ ul#toolbar li {
 }
 
 ul#toolbar a {
-    background-repeat: no-repeat;
     background-position: left center;
+    background-image: url('images/buttonbg.png');
     padding: 0.5em 0 0.5em 0;
     display: block;
     text-decoration: none;
@@ -157,6 +157,7 @@ ul#toolbar a {
 ul#toolbar a:hover {
     background-color: #CCCCCC;
     color: WHITE;
+    background-image: none;
 }
 
 div#formattedCode {
