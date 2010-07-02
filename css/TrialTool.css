@@ -83,10 +83,6 @@ div#example-sets ul {
     display: block;
 }
 
-div#example-sets * {
-    display: none;
-}
-
 li.example-set, li.example {
     margin: 0;
     padding: 0 0 0 0.5em;
@@ -98,6 +94,10 @@ div.example-docs, li.example textarea {
     display: none;
 }
 
+textarea.script {
+    display: none;
+}
+
 a.example-set-name {
     margin: 0.2em 0 0 0;
     padding: 0 0 0 1em;
@@ -105,7 +105,7 @@ a.example-set-name {
     color: black;
     display: inline;
     cursor: pointer;
-    background-image: url('images/opened.png');
+    background-image: url('../images/opened.png');
     background-repeat: no-repeat;
     background-position: left center;
 }
@@ -142,7 +142,7 @@ ul#toolbar li {
 
 ul#toolbar a {
     background-position: left center;
-    background-image: url('images/buttonbg.png');
+    background-image: url('../images/buttonbg.png');
     padding: 0.5em 0 0.5em 0;
     display: block;
     text-decoration: none;
@@ -200,7 +200,7 @@ ul#console-toolbar {
 ul#console-toolbar li.tab {
     height: 135px;
     width: 32px;
-    background-image: url('images/tab-closed.png');
+    background-image: url('../images/tab-closed.png');
     background-repeat: no-repeat;
     float: right;
     clear: both;

@@ -231,6 +231,7 @@ var TrialTool = (function(){
                 },
                 "success": function(data){
                     $("div#example-sets").append($(data));
+                    $("div#example-sets *").hide();
                     $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
                 },
                 "error": function(data, errorString, m){
