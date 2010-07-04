@@ -60,8 +60,8 @@ var TrialTool = (function(){
                 });
                 showCode(code.join(" "));
                 break;
-        };
-            });
+        }
+    });
     
     var runCode = function(code){
         TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
@@ -74,11 +74,11 @@ var TrialTool = (function(){
         
         // If the node does not exist, simply return
         if (!node) 
-            return;
+            return [];
         // if node exists in the visited nodes array, then also return
         for (var i = 0; i < visitedNodes.length; i++) {
             if (node.get(0) === visitedNodes[i]) 
-                return;
+                return [];
         }
         
         // Node is visited the first time, so let us process this node
