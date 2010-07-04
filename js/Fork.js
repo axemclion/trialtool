@@ -17,12 +17,14 @@ TrialTool.Fork = (function(){
      */
     var exampleForkButtons = function(){
         return $("<li>", {
-            "class": "fork"
+            "class": "fork fork-buttons"
         }).html("Add <a class = 'fork-example'>example</a>|<a class = 'fork-example-set'>example-set</a>");
     };
     
     var addToolBarButton = function(name, id){
-        $("ul#toolbar").append($("<li>").append($("<a>", {
+        $("ul#toolbar").append($("<li>", {
+            "class": "fork"
+        }).append($("<a>", {
             "id": id,
             "href": "#" + id,
             "class": "fork-toolbar-button"
@@ -32,7 +34,7 @@ TrialTool.Fork = (function(){
     /**
      * Removes the effect of forking and exports the examples in a new file
      */
-    var saveFork = function(){
+    var exportFork = function(){
         $(".fork").remove();
     }
     
@@ -65,6 +67,8 @@ TrialTool.Fork = (function(){
                     window.location.reload();
                 case "save":
                     $(".fork").remove();
+                    addToolBarButton("Fork", "fork");
+                    exportFork();
             }
             e.preventDefault();
         });
