@@ -10,7 +10,7 @@ a.fork-example:hover, a.fork-example-set:hover {
     text-decoration: none;
 }
 
-li.fork {
+li.fork-buttons {
     margin: 0;
     list-style: none;
     display: block;
