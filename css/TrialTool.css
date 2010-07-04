@@ -112,12 +112,11 @@ a.example-set-name {
 
 a.example-name {
     cursor: pointer;
-    display: inline;
-    margin: 0.2em 0 0 0;
-    padding: 0 1em 0 1em;
+    margin: 0 0.2em 0 1em;
     text-decoration: none;
     color: #5A5A5A;
-    display: table;
+    line-height: 16px;
+    vertical-align: middle;
 }
 
 a.example-name-selected {

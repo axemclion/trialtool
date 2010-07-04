@@ -19,6 +19,16 @@ li.fork-buttons {
     color: #800000;
 }
 
-div.fork-toolar {
-    display: none;
+span.example-edit img {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin: 0 0 0 3px;
+    vertical-align: middle;
+}
+
+span.example-edit input {
+    height: 14px;
+    font-size: 11px;
+    padding: 2px 0 2px 0;
 }

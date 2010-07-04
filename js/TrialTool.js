@@ -73,11 +73,11 @@ var TrialTool = (function(){
         var node = (example && typeof(example) === "string") ? $("li.#" + example.replace(/^\s+|\s+$/g, '') + ":first") : example;
         
         // If the node does not exist, simply return
-        if (!node) 
+        if (!node)             
             return [];
         // if node exists in the visited nodes array, then also return
         for (var i = 0; i < visitedNodes.length; i++) {
-            if (node.get(0) === visitedNodes[i]) 
+            if (node.get(0) === visitedNodes[i])                 
                 return [];
         }
         
@@ -114,7 +114,9 @@ var TrialTool = (function(){
         else {
             //console.log("Added result ", node);
             result.push({
-                "module": node.children("a.example-name").html(),
+                "module": node.children("a.example-name").contents().filter(function(){
+                    return this.nodeType == 3;
+                }).text(),
                 "code": node.children("textarea.script").val()
             });
         }
