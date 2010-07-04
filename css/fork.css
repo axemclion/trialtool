@@ -16,5 +16,9 @@ li.fork {
     display: block;
     padding: 0 0 0 1.5em;
     font-size: 0.8em;
-    color: #030655;
+    color: #800000;
+}
+
+div.fork-toolar {
+    display: none;
 }

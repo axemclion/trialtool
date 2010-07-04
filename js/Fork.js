@@ -1,12 +1,5 @@
-var Fork = (function(){
-    var isForking = false;
-    //Adding the forking CSS file
-    var css = document.createElement("link");
-    css.rel = "stylesheet";
-    css.type = "text/css";
-    css.href = "css/fork.css";
-    document.getElementsByTagName("head")[0].appendChild(css);
-    
+TrialTool.Fork = (function(){
+    var runOnce = false;
     /**
      * Adds a new example li node in the parent node
      * @param {Object} parent
@@ -22,34 +15,69 @@ var Fork = (function(){
     /**
      * Adds an LI to the example-set using which the user can add more examples or sets
      */
-    var exampleForker = function(){
+    var exampleForkButtons = function(){
         return $("<li>", {
             "class": "fork"
         }).html("Add <a class = 'fork-example'>example</a>|<a class = 'fork-example-set'>example-set</a>");
     };
     
+    var addToolBarButton = function(name, id){
+        $("ul#toolbar").append($("<li>").append($("<a>", {
+            "id": id,
+            "href": "#" + id,
+            "class": "fork-toolbar-button"
+        }).html(name)));
+    };
     
-    // Adding the fork button to the toolbar
-    $("ul#toolbar").append($("<li>").append($("<a>", {
-        "href": "#fork",
-        "id": "fork"
-    }).html("Fork").click(function(){
-        $("#example-sets ul").append(exampleForker());
-        isForking = true;
-    })));
+    /**
+     * Removes the effect of forking and exports the examples in a new file
+     */
+    var saveFork = function(){
+        $(".fork").remove();
+    }
     
-    // Adding event listeners to example and set adder
-    $("a.fork-example").live("click", function(e){
-        newExample().insertBefore($(this).parent());
-    });
-    // Adding event listeners to example and set adder
-    $("a.fork-example-set").live("click", function(e){
-        var li = $("<li>", {
-            "class": "example-set",
-            "id": Math.random()
-        }).html("<a class = 'example-set-name'>Edit example-set</a>").insertBefore($(this).parent());
-        var example = newExample().appendTo($("<ul>").appendTo(li));
-        exampleForker().insertAfter(example);
-    });
-    
+    // This is the initialization function. Should be run only once
+    if (!runOnce) {
+        //Adding the forking CSS file
+        var css = document.createElement("link");
+        css.rel = "stylesheet";
+        css.type = "text/css";
+        css.href = "css/fork.css";
+        document.getElementsByTagName("head")[0].appendChild(css);
+        
+        addToolBarButton("Fork", "fork");
+        
+        // Adding event listeners to example and set adder
+        $("a.fork-example").live("click", function(e){
+            newExample().insertBefore($(this).parent());
+        });
+        
+        $("ul#toolbar a.fork-toolbar-button").live("click", function(e){
+        
+            switch ($(this).attr("id")) {
+                case "fork":
+                    $("div#example-sets ul").append(exampleForkButtons());
+                    addToolBarButton("Save Fork", "save");
+                    $(this).parent().hide();
+                    addToolBarButton("Cancel Fork", "cancel");
+                    break;
+                case "cancel":
+                    window.location.reload();
+                case "save":
+                    $(".fork").remove();
+            }
+            e.preventDefault();
+        });
+        
+        // Adding event listeners to example and set adder
+        $("a.fork-example-set").live("click", function(e){
+            var li = $("<li>", {
+                "class": "example-set",
+                "id": Math.random()
+            }).html("<a class = 'example-set-name'>Edit example-set</a>").insertBefore($(this).parent());
+            var example = newExample().appendTo($("<ul>").appendTo(li));
+            exampleForkButtons().insertAfter(example);
+        });
+        runOnce = true;
+    }
 })();

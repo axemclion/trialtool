@@ -64,16 +64,7 @@ var TrialTool = (function(){
             });
     
     var runCode = function(code){
-        var iframe = $("#console-iframe").get(0).contentWindow;
-        if (!iframe.eval && iframe.execScript) {
-            iframe.execScript("null");
-        }
-        try {
-            iframe.eval(code);
-        } 
-        catch (e) {
-            iframe.writeError(e);
-        }
+        TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
     }
     
     var visitedNodes = [];
@@ -238,6 +229,17 @@ var TrialTool = (function(){
                     alert("Could not load " + url);
                 }
             });
+        },
+        executeInWindow: function(code, contentWindow){
+            try {
+                if (!contentWindow.eval && contentWindow.execScript) {
+                    contentWindow.execScript("null");
+                }
+                contentWindow.eval(code);
+            } 
+            catch (e) {
+                contentWindow.writeError(e);
+            }
         }
     };
 })();
