@@ -1,31 +1,11 @@
 TrialTool.Fork = (function(){
     var runOnce = false;
     var isEditingExample = false;
-    /**
-     * Adds a new example li node in the parent node
-     * @param {Object} parent
-     */
-    var newExample = function(){
-        var li = $("<li>", {
-            "class": "example",
-            "id": Math.random()
-        }).html(["<a class = 'example-name'>Edit example</a>", "<textarea class= 'script'>//Edit Me</textarea>", "<div class = 'example-docs'>Edit Docs<div>"].join(""));
-        return li;
-    };
-    
-    /**
-     * Adds an LI to the example-set using which the user can add more examples or sets
-     */
-    var exampleForkButtons = function(){
-        return $("<li>", {
-            "class": "fork fork-buttons"
-        }).html("Add <a class = 'fork-example'>example</a>|<a class = 'fork-example-set'>example-set</a>");
-    };
     
     /**
      * Adds a toolbar to every example that lets you rename or delete the example
      */
-    var exampleEdit = function(){
+    var exampleEdit = function(category){
         var iconButton = function(name, desc){
             return $("<img>", {
                 "class": name,
@@ -39,6 +19,10 @@ TrialTool.Fork = (function(){
         }).hide();
         
         toolbar.append(iconButton("example-rename", "Rename this exaomple"));
+        if (category && category === "example-set") {
+            toolbar.append(iconButton("example-add", "Add a new example in this category"));
+            toolbar.append(iconButton("example-set-add", "Add a new sub category"));
+        }
         toolbar.append(iconButton("example-remove", "Delete this example"));
         toolbar.append(iconButton("example-move", "Reorder this example"));
         toolbar.append($("<input>").hide());
@@ -76,8 +60,10 @@ TrialTool.Fork = (function(){
     var startFork = function(){
         addToolBarButton("Save Fork", "save", "Save and export this example");
         addToolBarButton("Cancel Fork", "cancel", "Cancel forking this example and return to the examples");
-        exampleEdit().insertAfter("div#example-sets a.example-name, div#example-sets a.example-set-name")
-        $("div#example-sets ul").append(exampleForkButtons());
+        
+        exampleEdit().insertAfter("a.example-name");
+        exampleEdit("example-set").insertAfter("a.example-set-name");
+        
         $("li.example-set, li.example").draggable({
             "axis": "y",
             "containment": "div#example-sets",
@@ -123,11 +109,6 @@ TrialTool.Fork = (function(){
         document.getElementsByTagName("head")[0].appendChild(css);
         addToolBarButton("Fork", "fork");
         
-        // Adding event listeners to example and set adder
-        $("a.fork-example").live("click", function(e){
-            newExample().insertBefore($(this).parent());
-        });
-        
         $("ul#toolbar a.fork-toolbar-button").live("click", function(e){
             switch ($(this).attr("id")) {
                 case "fork":
@@ -140,21 +121,10 @@ TrialTool.Fork = (function(){
                     endFork();
                     addToolBarButton("Fork", "fork");
                     exportFork();
+                    break;
             }
             e.preventDefault();
             e.stopPropagation();
-        });
-        
-        // Adding event listeners to example and set adder
-        $("a.fork-example-set").live("click", function(e){
-            var li = $("<li>", {
-                "class": "example-set",
-                "id": Math.random()
-            }).html("<a class = 'example-set-name'>Edit example-set</a>").insertBefore($(this).parent());
-            var example = newExample().appendTo($("<ul>").appendTo(li));
-            exampleForkButtons().insertAfter(example);
-            e.stopPropagation();
-            e.preventDefault();
         });
         
         // Adding mouse events for hover on example
@@ -194,6 +164,22 @@ TrialTool.Fork = (function(){
                 button.parent().children().toggle();
                 isEditingExample = false;
             }
+            else if (button.hasClass("example-add")) {
+                var li = $("<li>", {
+                    "class": "example",
+                    "id": Math.random()
+                }).html(["<a class = 'example-name'>Edit example</a>", "<textarea class= 'script'>//Edit Me</textarea>", "<div class = 'example-docs'>Edit Docs<div>"].join(""));
+                exampleEdit().insertAfter(li.children("a"));
+                node.children("ul").append(li);
+            }
+            else if (button.hasClass("example-set-add")) {
+                var li = $("<li>", {
+                    "class": "example-set",
+                    "id": Math.random()
+                }).html("<a class = 'example-set-name'>Edit example-set</a>").append(exampleEdit("example-set"));
+                node.append(li.append("<ul>"));
+            }
+            
             return false;
         });
         
