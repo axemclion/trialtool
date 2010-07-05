@@ -1,5 +1,6 @@
 TrialTool.Fork = (function(){
     var runOnce = false;
+    var isEditingExample = false;
     /**
      * Adds a new example li node in the parent node
      * @param {Object} parent
@@ -35,10 +36,11 @@ TrialTool.Fork = (function(){
         
         var toolbar = $("<span>", {
             "class": "example-edit fork"
-        });
+        }).hide();
         
         toolbar.append(iconButton("example-rename", "Rename this exaomple"));
         toolbar.append(iconButton("example-remove", "Delete this example"));
+        toolbar.append(iconButton("example-move", "Reorder this example"));
         toolbar.append($("<input>").hide());
         toolbar.append(iconButton("example-text", "Accept the new name for this example").hide());
         toolbar.append(iconButton("example-cancel", "Cancel the changes to the example").hide());
@@ -74,10 +76,14 @@ TrialTool.Fork = (function(){
     var startFork = function(){
         addToolBarButton("Save Fork", "save", "Save and export this example");
         addToolBarButton("Cancel Fork", "cancel", "Cancel forking this example and return to the examples");
-        $("div#example-sets a.example-name").parent().append(exampleEdit());
+        exampleEdit().insertAfter("div#example-sets a.example-name, div#example-sets a.example-set-name")
         $("div#example-sets ul").append(exampleForkButtons());
     }
     
+    var endFork = function(){
+        $(".fork").remove();
+        $("div#example-sets a.example-name, div#example-sets a.example-set-name").die("mouseover");
+    }
     
     // This is the initialization function. Should be run only once
     if (!runOnce) {
@@ -103,11 +109,12 @@ TrialTool.Fork = (function(){
                 case "cancel":
                     window.location.reload();
                 case "save":
-                    $(".fork").remove();
+                    endFork();
                     addToolBarButton("Fork", "fork");
                     exportFork();
             }
             e.preventDefault();
+            e.stopPropagation();
         });
         
         // Adding event listeners to example and set adder
@@ -118,7 +125,19 @@ TrialTool.Fork = (function(){
             }).html("<a class = 'example-set-name'>Edit example-set</a>").insertBefore($(this).parent());
             var example = newExample().appendTo($("<ul>").appendTo(li));
             exampleForkButtons().insertAfter(example);
+            e.stopPropagation();
+            e.preventDefault();
         });
+        
+        // Adding mouse events for hover on example
+        $("li.example, li.example-set").live("mouseleave", function(e){
+            isEditingExample || $(this).children("span.example-edit").hide();
+            e.stopPropagation();
+        });
+        $("a.example-name, a.example-set-name").live("mouseenter", function(e){
+            isEditingExample || $(this).siblings("span.example-edit").css("display", "inline");
+            e.stopPropagation();
+        })
         
         // Adding event listeners to example-edit buttons
         $("span.example-edit img").live("click", function(e){
@@ -132,17 +151,21 @@ TrialTool.Fork = (function(){
             else if (button.hasClass("example-rename")) {
                 button.siblings("input").val(a.text()).attr("title", a.text());
                 a.text("");
-                button.parent().children().toggle();
+                button.parent().children().each(function(){
+                    $(this).css("display", $(this).css("display") === "none" ? "inline" : "none");
+                });
+                isEditingExample = true;
             }
             else if (button.hasClass("example-text")) {
                 a.text(button.siblings("input").val());
                 button.parent().children().toggle();
+                isEditingExample = false;
             }
             else if (button.hasClass("example-cancel")) {
                 a.text(button.siblings("input").attr("title"));
                 button.parent().children().toggle();
+                isEditingExample = false;
             }
-            
             return false;
         });
         

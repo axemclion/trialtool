@@ -108,6 +108,7 @@ a.example-set-name {
     background-image: url('../images/opened.png');
     background-repeat: no-repeat;
     background-position: left center;
+    line-height: 16px;
 }
 
 a.example-name {
