@@ -65,34 +65,13 @@ TrialTool.Fork = (function(){
         exampleEdit().insertAfter("a.example-name");
         exampleEdit("example-set").insertAfter("a.example-set-name");
         
-        $("li.example-set, li.example").draggable({
+        $("div#example-sets").sortable({
             "axis": "y",
-            "containment": "div#example-sets",
-            "scope": "example-reorder",
+            "items": "li.example, li.example-set",
             "handle": "img.example-move",
-            "revert": "true",
-            "helper": "clone",
-            "start": function(e, ui){
-                isEditingExample = true;
-            },
-            "stop": function(){
-                isEditingExample = false;
-            }
-        });
-        $("a.example-name, a.example-set-name").droppable({
-            "hoverClass": "example-reorder-hover",
-            "scope": "example-reorder",
-            "greedy": "false",
-            "accept": "li.example-set, li.example",
-            "drop": function(e, ui){
-                if ($(this).hasClass("example-set-name")) {
-                    $(ui.draggable).appendTo($(this).siblings("ul"));
-                }
-                else {
-                    $(ui.draggable).insertAfter($(this).parent());
-                }
-                
-            }
+            "revert": true,
+            "forcePlaceholderSize": true,
+            "forceHelperSize": true
         });
     }
     
