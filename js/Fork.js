@@ -18,13 +18,14 @@ TrialTool.Fork = (function(){
             "class": "example-edit fork"
         }).hide();
         
+        toolbar.append(iconButton("example-move", "Reorder this example"));
         toolbar.append(iconButton("example-rename", "Rename this exaomple"));
         if (category && category === "example-set") {
             toolbar.append(iconButton("example-add", "Add a new example in this category"));
             toolbar.append(iconButton("example-set-add", "Add a new sub category"));
         }
         toolbar.append(iconButton("example-remove", "Delete this example"));
-        toolbar.append(iconButton("example-move", "Reorder this example"));
+        
         toolbar.append($("<input>").hide());
         toolbar.append(iconButton("example-text", "Accept the new name for this example").hide());
         toolbar.append(iconButton("example-cancel", "Cancel the changes to the example").hide());
@@ -71,7 +72,7 @@ TrialTool.Fork = (function(){
             "handle": "img.example-move",
             "revert": "true",
             "helper": "clone",
-            "start": function(){
+            "start": function(e, ui){
                 isEditingExample = true;
             },
             "stop": function(){
@@ -85,7 +86,7 @@ TrialTool.Fork = (function(){
             "accept": "li.example-set, li.example",
             "drop": function(e, ui){
                 if ($(this).hasClass("example-set-name")) {
-                    $(ui.draggable).insertAfter($(this));
+                    $(ui.draggable).appendTo($(this).siblings("ul"));
                 }
                 else {
                     $(ui.draggable).insertAfter($(this).parent());
