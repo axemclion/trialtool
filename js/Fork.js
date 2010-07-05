@@ -78,11 +78,39 @@ TrialTool.Fork = (function(){
         addToolBarButton("Cancel Fork", "cancel", "Cancel forking this example and return to the examples");
         exampleEdit().insertAfter("div#example-sets a.example-name, div#example-sets a.example-set-name")
         $("div#example-sets ul").append(exampleForkButtons());
+        $("li.example-set, li.example").draggable({
+            "axis": "y",
+            "containment": "div#example-sets",
+            "scope": "example-reorder",
+            "handle": "img.example-move",
+            "revert": "true",
+            "helper": "clone",
+            "start": function(){
+                isEditingExample = true;
+            },
+            "stop": function(){
+                isEditingExample = false;
+            }
+        });
+        $("a.example-name, a.example-set-name").droppable({
+            "hoverClass": "example-reorder-hover",
+            "scope": "example-reorder",
+            "greedy": "false",
+            "accept": "li.example-set, li.example",
+            "drop": function(e, ui){
+                if ($(this).hasClass("example-set-name")) {
+                    $(ui.draggable).insertAfter($(this));
+                }
+                else {
+                    $(ui.draggable).insertAfter($(this).parent());
+                }
+                
+            }
+        });
     }
     
     var endFork = function(){
         $(".fork").remove();
-        $("div#example-sets a.example-name, div#example-sets a.example-set-name").die("mouseover");
     }
     
     // This is the initialization function. Should be run only once
