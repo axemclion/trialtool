@@ -113,6 +113,7 @@ TrialTool.Fork = (function(){
                     toolBarButton("Fork", "Create a new example based on this example");
                     break;
                 case "Save_Code":
+                    $("a.example-name-selected").siblings("textarea.script").val(TrialTool.getCode());
                     break;
             }
             e.preventDefault();

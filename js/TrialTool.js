@@ -243,8 +243,8 @@ var TrialTool = (function(){
                 contentWindow.writeError(e);
             }
         },
-        getCurrentSelection: function(){
-            return currentSelection();
+        getCode: function(){
+            return editor.getCode();
         }
     };
 })();
