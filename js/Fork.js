@@ -37,12 +37,12 @@ TrialTool.Fork = (function(){
      * @param {Object} name
      * @param {Object} id
      */
-    var addToolBarButton = function(name, id, desc){
-        $("ul#toolbar").append($("<li>", {
+    var toolBarButton = function(name, desc){
+        $("ul#fork-toolbar").append($("<li>", {
             "class": "fork"
         }).append($("<a>", {
-            "id": id,
-            "href": "#" + id,
+            "id": name.replace(/\W/g, "_"),
+            "href": "#" + name.replace(/\W/g, "_"),
             "class": "fork-toolbar-button",
             "title": desc
         }).html(name)));
@@ -59,8 +59,12 @@ TrialTool.Fork = (function(){
      * Starts the forking process
      */
     var startFork = function(){
-        addToolBarButton("Save Fork", "save", "Save and export this example");
-        addToolBarButton("Cancel Fork", "cancel", "Cancel forking this example and return to the examples");
+        toolBarButton("Save Fork", "Save and export this example");
+        toolBarButton("Cancel Fork", "Cancel forking this example and return to the examples");
+        
+        $("div#code-area").append($("<ul>", {
+            "class": "fork toolbar floating-toolbar"
+        }).append(toolBarButton("Save Code", "Save this code")));
         
         exampleEdit().insertAfter("a.example-name");
         exampleEdit("example-set").insertAfter("a.example-set-name");
@@ -80,27 +84,35 @@ TrialTool.Fork = (function(){
     }
     
     // This is the initialization function. Should be run only once
-    if (!runOnce) {
+    var runOnce = function(){
         //Adding the forking CSS file
         var css = document.createElement("link");
         css.rel = "stylesheet";
         css.type = "text/css";
         css.href = "css/fork.css";
         document.getElementsByTagName("head")[0].appendChild(css);
-        addToolBarButton("Fork", "fork");
+        toolBarButton("Fork", "Create a new example based on this example");
         
-        $("ul#toolbar a.fork-toolbar-button").live("click", function(e){
+        // Adding the toolbar where fork buttons will be added 
+        $("<ul>", {
+            "id": "fork-toolbar"
+        }).appendTo("div#examples-title");
+        toolBarButton("Fork", "Create a new example based on this example");
+        
+        $("a.fork-toolbar-button").live("click", function(e){
             switch ($(this).attr("id")) {
-                case "fork":
+                case "Fork":
                     startFork();
-                    $(this).parent().hide();
+                    $(this).parent().remove();
                     break;
-                case "cancel":
+                case "Cancel_Fork":
                     window.location.reload();
-                case "save":
+                case "Save_Fork":
                     endFork();
-                    addToolBarButton("Fork", "fork");
                     exportFork();
+                    toolBarButton("Fork", "Create a new example based on this example");
+                    break;
+                case "Save_Code":
                     break;
             }
             e.preventDefault();
@@ -159,12 +171,8 @@ TrialTool.Fork = (function(){
                 }).html("<a class = 'example-set-name'>Edit example-set</a>").append(exampleEdit("example-set"));
                 node.append(li.append("<ul>"));
             }
-            
             return false;
         });
-        
-        runOnce = true;
     }
-    
-    // All other initialization logic
+    runOnce();
 })();

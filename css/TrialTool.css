@@ -125,7 +125,7 @@ a.example-name-selected {
     font-weight: bold;
 }
 
-ul#toolbar {
+ul.toolbar {
     list-style: none;
     padding: 0;
     margin: 0 1em 0 0;
@@ -133,29 +133,44 @@ ul#toolbar {
     float: right;
 }
 
-ul#toolbar li {
+ul.toolbar li {
     float: left;
-    margin: 0.5em 1em 0 0em;
-    width: 12em;
+    margin: 0.3em 0 0 0;
+    width: auto;
     text-align: center;
 }
 
-ul#toolbar a {
+ul.toolbar a {
     background-position: left center;
     background-image: url('../images/buttonbg.png');
-    padding: 0.5em 0 0.5em 0;
+    padding: 0.5em 1em 0.5em 1em;
     display: block;
     text-decoration: none;
     color: BLACK;
     background-color: #E6E6E6;
-    font-weight: bold;
-    -moz-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    border: SOLID 1px #BBBBBB;
 }
 
-ul#toolbar a:hover {
-    background-color: #CCCCCC;
+ul.toolbar li:first-child a {
+    border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-radius-bottomleft: 5px;
+    border-radius-topleft: 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-radius-topleft: 5px;
+}
+
+ul.toolbar li:last-child a {
+    border-radius-bottomright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-radius-bottomright: 5px;
+    border-radius-topright: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-radius-topright: 5px;
+}
+
+ul.toolbar a:hover {
+    background-color: #999999;
     color: WHITE;
     background-image: none;
 }

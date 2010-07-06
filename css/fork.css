@@ -38,6 +38,16 @@ span.example-edit input {
     padding: 2px 0 2px 0;
 }
 
-.example-reorder-hover {
-    border-bottom: SOLID BLACK 5px;
+ul#fork-toolbar {
+    display: inline;
+    margin: 0;
+    float: right;
+    list-style: none;
+    font-size: 0.8em;
+}
+
+ul#fork-toolbar li {
+    display: inline;
+    float: left;
+    padding: 0 0 0 0.5em;
 }

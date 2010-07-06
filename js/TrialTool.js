@@ -242,6 +242,9 @@ var TrialTool = (function(){
             catch (e) {
                 contentWindow.writeError(e);
             }
+        },
+        getCurrentSelection: function(){
+            return currentSelection();
         }
     };
 })();
