@@ -115,6 +115,11 @@ TrialTool.Fork = (function(){
                     break;
                 case "Save_Code":
                     $("a.example-name-selected").siblings("textarea.script").val(TrialTool.getCode());
+                    var button = $(this);
+                    button.html(" Saved &#10003;");
+                    window.setTimeout(function(){
+                        button.html("Save Code");
+                    }, 3000);
                     break;
             }
             e.preventDefault();
