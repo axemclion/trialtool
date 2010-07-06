@@ -38,7 +38,7 @@ TrialTool.Fork = (function(){
      * @param {Object} id
      */
     var toolBarButton = function(name, desc){
-        $("ul#fork-toolbar").append($("<li>", {
+        return ($("<li>", {
             "class": "fork"
         }).append($("<a>", {
             "id": name.replace(/\W/g, "_"),
@@ -59,12 +59,12 @@ TrialTool.Fork = (function(){
      * Starts the forking process
      */
     var startFork = function(){
-        toolBarButton("Save Fork", "Save and export this example");
-        toolBarButton("Cancel Fork", "Cancel forking this example and return to the examples");
+        toolBarButton("Save Fork", "Save and export this example").appendTo("ul#fork-toolbar");
+        toolBarButton("Cancel Fork", "Cancel forking this example and return to the examples").appendTo("ul#fork-toolbar");
         
-        $("div#code-area").append($("<ul>", {
+        $("div#code-area").prepend($("<ul>", {
             "class": "fork toolbar floating-toolbar"
-        }).append(toolBarButton("Save Code", "Save this code")));
+        }).append(toolBarButton("Save Code", "Save the code you edited")));
         
         exampleEdit().insertAfter("a.example-name");
         exampleEdit("example-set").insertAfter("a.example-set-name");
@@ -78,6 +78,7 @@ TrialTool.Fork = (function(){
             "forceHelperSize": true
         });
     }
+    // 2-3290336775
     
     var endFork = function(){
         $(".fork").remove();
@@ -97,7 +98,7 @@ TrialTool.Fork = (function(){
         $("<ul>", {
             "id": "fork-toolbar"
         }).appendTo("div#examples-title");
-        toolBarButton("Fork", "Create a new example based on this example");
+        toolBarButton("Fork", "Create a new example based on this example").appendTo("ul#fork-toolbar");
         
         $("a.fork-toolbar-button").live("click", function(e){
             switch ($(this).attr("id")) {
@@ -110,7 +111,7 @@ TrialTool.Fork = (function(){
                 case "Save_Fork":
                     endFork();
                     exportFork();
-                    toolBarButton("Fork", "Create a new example based on this example");
+                    toolBarButton("Fork", "Create a new example based on this example").appendTo("ul#fork-toolbar");
                     break;
                 case "Save_Code":
                     $("a.example-name-selected").siblings("textarea.script").val(TrialTool.getCode());
