@@ -1,6 +1,6 @@
 TrialTool.Fork = (function(){
-    var runOnce = false;
     var isEditingExample = false;
+    var loadedJwysiwyg = false;
     
     /**
      * Adds a toolbar to every example that lets you rename or delete the example
@@ -10,7 +10,7 @@ TrialTool.Fork = (function(){
             return $("<img>", {
                 "class": name,
                 "title": desc || "",
-                "src": "images/" + name + ".png"
+                "src": "images/fork/" + name + ".png"
             });
         }
         
@@ -77,21 +77,61 @@ TrialTool.Fork = (function(){
             "forcePlaceholderSize": true,
             "forceHelperSize": true
         });
+        
+        // Adding editor to the document
+        var loadDocEditor = function(){
+            $("div#console-content *").hide();
+            $("<textarea>", {
+                "class": "fork"
+            }).insertBefore("div#docs");
+            $("div#console-content>textarea").wysiwyg({
+                controls: {
+                    alertSep: {
+                        separator: true
+                    },
+                    save: {
+                        visible: true,
+                        exec: function(){
+                            var docs = $("a.example-name-selected").siblings(".example-docs")
+                            if (docs.length > 0) {
+                                if (docs.get(0).nodeName === "LINK") {
+                                    $(docs.attr("href")).html($("div#console-content>textarea").wysiwyg("getContent"));
+                                }
+                                else {
+                                    docs.html($("div#console-content>textarea").wysiwyg("getContent"));
+                                }
+                            }
+                        },
+                        className: 'saveIcon'
+                    }
+                }
+            });
+            $("li.saveIcon").css("background", "url('images/fork/saveIcon.png')");
+            $("div#console-content>textarea").wysiwyg("setContent", $("div#docs").html());
+        };
+        
+        $.getScript("lib/jwysiwyg/jquery.wysiwyg.min.js", loadDocEditor);
     }
-    // 2-3290336775
     
     var endFork = function(){
         $(".fork").remove();
+        $(".wysiwyg").remove();
     }
     
     // This is the initialization function. Should be run only once
     var runOnce = function(){
-        //Adding the forking CSS file
-        var css = document.createElement("link");
-        css.rel = "stylesheet";
-        css.type = "text/css";
-        css.href = "css/fork.css";
-        document.getElementsByTagName("head")[0].appendChild(css);
+        var loadCss = function(url){
+            //Adding the forking CSS file
+            var css = document.createElement("link");
+            css.rel = "stylesheet";
+            css.type = "text/css";
+            css.href = url;
+            document.getElementsByTagName("head")[0].appendChild(css);
+        }
+        
+        loadCss("lib/jwysiwyg/jquery.wysiwyg.css");
+        loadCss("css/fork.css");
+        
         toolBarButton("Fork", "Create a new example based on this example");
         
         // Adding the toolbar where fork buttons will be added 
@@ -179,6 +219,21 @@ TrialTool.Fork = (function(){
                 node.append(li.append("<ul>"));
             }
             return false;
+        });
+        
+        $("a.example-name").live("click", function(e){
+            var docs = $(this).siblings(".example-docs");
+            if (docs.length > 0) {
+                if (docs.get(0).nodeName === "LINK") {
+                    $("div#console-content>textarea").wysiwyg("setContent", $(docs.attr("href")).html());
+                }
+                else {
+                    $("div#console-content>textarea").wysiwyg("setContent", docs.html());
+                }
+            }
+            else {
+                $("div#console-content>textarea").wysiwyg("setContent", "Edit the documentation here");
+            }
         });
     }
     runOnce();

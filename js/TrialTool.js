@@ -31,6 +31,9 @@ var TrialTool = (function(){
                 
             }
         }
+        else {
+            $("div#docs").html("No documentation provided");
+        }
         e.preventDefault();
     });
     
