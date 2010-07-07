@@ -31,6 +31,9 @@ var TrialTool = (function(){
                 
             }
         }
+        else {
+            $("div#docs").html("No documentation provided");
+        }
         e.preventDefault();
     });
     
@@ -60,20 +63,11 @@ var TrialTool = (function(){
                 });
                 showCode(code.join(" "));
                 break;
-        };
-            });
+        }
+    });
     
     var runCode = function(code){
-        var iframe = $("#console-iframe").get(0).contentWindow;
-        if (!iframe.eval && iframe.execScript) {
-            iframe.execScript("null");
-        }
-        try {
-            iframe.eval(code);
-        } 
-        catch (e) {
-            iframe.writeError(e);
-        }
+        TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
     }
     
     var visitedNodes = [];
@@ -82,12 +76,12 @@ var TrialTool = (function(){
         var node = (example && typeof(example) === "string") ? $("li.#" + example.replace(/^\s+|\s+$/g, '') + ":first") : example;
         
         // If the node does not exist, simply return
-        if (!node) 
-            return;
+        if (!node)             
+            return [];
         // if node exists in the visited nodes array, then also return
         for (var i = 0; i < visitedNodes.length; i++) {
-            if (node.get(0) === visitedNodes[i]) 
-                return;
+            if (node.get(0) === visitedNodes[i])                 
+                return [];
         }
         
         // Node is visited the first time, so let us process this node
@@ -123,7 +117,9 @@ var TrialTool = (function(){
         else {
             //console.log("Added result ", node);
             result.push({
-                "module": node.children("a.example-name").html(),
+                "module": node.children("a.example-name").contents().filter(function(){
+                    return this.nodeType == 3;
+                }).text(),
                 "code": node.children("textarea.script").val()
             });
         }
@@ -231,12 +227,27 @@ var TrialTool = (function(){
                 },
                 "success": function(data){
                     $("div#example-sets").append($(data));
+                    $("div#example-sets *").hide();
                     $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
                 },
                 "error": function(data, errorString, m){
                     alert("Could not load " + url);
                 }
             });
+        },
+        executeInWindow: function(code, contentWindow){
+            try {
+                if (!contentWindow.eval && contentWindow.execScript) {
+                    contentWindow.execScript("null");
+                }
+                contentWindow.eval(code);
+            } 
+            catch (e) {
+                contentWindow.writeError(e);
+            }
+        },
+        getCode: function(){
+            return editor.getCode();
         }
     };
 })();

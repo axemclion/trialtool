@@ -1,0 +1,67 @@
+a.fork-example, a.fork-example-set {
+    padding: 0 0.3em;
+    cursor: pointer;
+    text-decoration: underline;
+    font-style: italic;
+}
+
+a.fork-example:hover, a.fork-example-set:hover {
+    background-color: #ABCDEF;
+    text-decoration: none;
+}
+
+li.fork-buttons {
+    margin: 0;
+    list-style: none;
+    display: block;
+    padding: 0 0 0 1.5em;
+    font-size: 0.8em;
+    color: #800000;
+}
+
+span.example-edit {
+    display: inline;
+}
+
+span.example-edit img {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    margin: 0 0 0 3px;
+    vertical-align: middle;
+    display: inline;
+}
+
+span.example-edit input {
+    height: 14px;
+    font-size: 11px;
+    padding: 2px 0 2px 0;
+}
+
+ul#fork-toolbar {
+    display: inline;
+    margin: 0;
+    float: right;
+    list-style: none;
+    font-size: 0.8em;
+}
+
+ul#fork-toolbar li {
+    display: inline;
+    float: left;
+    padding: 0 0 0 0.5em;
+}
+
+ul.floating-toolbar {
+    height: auto;
+    position: absolute;
+    float: right;
+    top: 0;
+    margin: 0.8% 0 0 1em;
+    font-size: 0.8em;
+}
+
+div#console-content textarea {
+    width: 100%;
+    height: 100%;
+}

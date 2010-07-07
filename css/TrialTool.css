@@ -83,10 +83,6 @@ div#example-sets ul {
     display: block;
 }
 
-div#example-sets * {
-    display: none;
-}
-
 li.example-set, li.example {
     margin: 0;
     padding: 0 0 0 0.5em;
@@ -98,6 +94,10 @@ div.example-docs, li.example textarea {
     display: none;
 }
 
+textarea.script {
+    display: none;
+}
+
 a.example-set-name {
     margin: 0.2em 0 0 0;
     padding: 0 0 0 1em;
@@ -105,19 +105,19 @@ a.example-set-name {
     color: black;
     display: inline;
     cursor: pointer;
-    background-image: url('images/opened.png');
+    background-image: url('../images/opened.png');
     background-repeat: no-repeat;
     background-position: left center;
+    line-height: 16px;
 }
 
 a.example-name {
     cursor: pointer;
-    display: inline;
-    margin: 0.2em 0 0 0;
-    padding: 0 1em 0 1em;
+    margin: 0 0.2em 0 1em;
     text-decoration: none;
     color: #5A5A5A;
-    display: table;
+    line-height: 16px;
+    vertical-align: middle;
 }
 
 a.example-name-selected {
@@ -125,7 +125,7 @@ a.example-name-selected {
     font-weight: bold;
 }
 
-ul#toolbar {
+ul.toolbar {
     list-style: none;
     padding: 0;
     margin: 0 1em 0 0;
@@ -133,30 +133,46 @@ ul#toolbar {
     float: right;
 }
 
-ul#toolbar li {
+ul.toolbar li {
     float: left;
-    margin: 0.5em 1em 0 0em;
-    width: 12em;
+    margin: 0.3em 0 0 0;
+    width: auto;
     text-align: center;
 }
 
-ul#toolbar a {
-    background-repeat: no-repeat;
+ul.toolbar a {
     background-position: left center;
-    padding: 0.5em 0 0.5em 0;
+    background-image: url('../images/buttonbg.png');
+    padding: 0.5em 1em 0.5em 1em;
     display: block;
     text-decoration: none;
     color: BLACK;
     background-color: #E6E6E6;
-    font-weight: bold;
-    -moz-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
+    border: SOLID 1px #BBBBBB;
 }
 
-ul#toolbar a:hover {
-    background-color: #CCCCCC;
+ul.toolbar li:first-child a {
+    border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -webkit-border-radius-bottomleft: 5px;
+    border-radius-topleft: 5px;
+    -moz-border-radius-topleft: 5px;
+    -webkit-border-radius-topleft: 5px;
+}
+
+ul.toolbar li:last-child a {
+    border-radius-bottomright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -webkit-border-radius-bottomright: 5px;
+    border-radius-topright: 5px;
+    -moz-border-radius-topright: 5px;
+    -webkit-border-radius-topright: 5px;
+}
+
+ul.toolbar a:hover {
+    background-color: #999999;
     color: WHITE;
+    background-image: none;
 }
 
 div#formattedCode {
@@ -199,7 +215,7 @@ ul#console-toolbar {
 ul#console-toolbar li.tab {
     height: 135px;
     width: 32px;
-    background-image: url('images/tab-closed.png');
+    background-image: url('../images/tab-closed.png');
     background-repeat: no-repeat;
     float: right;
     clear: both;
