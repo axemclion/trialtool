@@ -48,6 +48,24 @@ TrialTool.Fork = (function(){
         }).html(name)));
     };
     
+    var documentation = function(content){
+        var docs = $("a.example-name-selected").siblings(".example-docs");
+        if (docs.length === 0) {
+            docs = $("<div>", {
+                "class": "example-docs"
+            }).insertAfter("a.example-name-selected");
+        }
+        else if (docs.get(0).nodeName === "LINK") {
+            docs = $(docs.attr("href"));
+        }
+        return content ? docs.html(content) : docs.html();
+    };
+    
+    var saveDocInEditor = function(){
+        $("div#console-content>textarea").wysiwyg("setContent", documentation());
+    }
+    
+    
     /**
      * Removes the effect of forking and exports the examples in a new file
      */
@@ -79,8 +97,8 @@ TrialTool.Fork = (function(){
         });
         
         // Adding editor to the document
-        var loadDocEditor = function(){
-            $("div#console-content *").hide();
+        var initDocEditor = function(){
+            $("div#console-content>*").hide();
             $("<textarea>", {
                 "class": "fork"
             }).insertBefore("div#docs");
@@ -92,15 +110,7 @@ TrialTool.Fork = (function(){
                     save: {
                         visible: true,
                         exec: function(){
-                            var docs = $("a.example-name-selected").siblings(".example-docs")
-                            if (docs.length > 0) {
-                                if (docs.get(0).nodeName === "LINK") {
-                                    $(docs.attr("href")).html($("div#console-content>textarea").wysiwyg("getContent"));
-                                }
-                                else {
-                                    docs.html($("div#console-content>textarea").wysiwyg("getContent"));
-                                }
-                            }
+                            documentation($("div#console-content>textarea").wysiwyg("getContent"));
                         },
                         className: 'saveIcon'
                     }
@@ -108,15 +118,17 @@ TrialTool.Fork = (function(){
             });
             $("li.saveIcon").css("background", "url('images/fork/saveIcon.png')");
             $("div#console-content>textarea").wysiwyg("setContent", $("div#docs").html());
+            $("a.example-name").live("click", saveDocInEditor);
         };
-        
-        $.getScript("lib/jwysiwyg/jquery.wysiwyg.min.js", loadDocEditor);
+        $.getScript("lib/jwysiwyg/jquery.wysiwyg.min.js", initDocEditor);
     }
     
     var endFork = function(){
         $(".fork").remove();
+        $("div#docs").show();
         $(".wysiwyg").remove();
-    }
+        $("a.example-name").die("click", saveDocInEditor);
+    };
     
     // This is the initialization function. Should be run only once
     var runOnce = function(){
@@ -219,21 +231,6 @@ TrialTool.Fork = (function(){
                 node.append(li.append("<ul>"));
             }
             return false;
-        });
-        
-        $("a.example-name").live("click", function(e){
-            var docs = $(this).siblings(".example-docs");
-            if (docs.length > 0) {
-                if (docs.get(0).nodeName === "LINK") {
-                    $("div#console-content>textarea").wysiwyg("setContent", $(docs.attr("href")).html());
-                }
-                else {
-                    $("div#console-content>textarea").wysiwyg("setContent", docs.html());
-                }
-            }
-            else {
-                $("div#console-content>textarea").wysiwyg("setContent", "Edit the documentation here");
-            }
         });
     }
     runOnce();
