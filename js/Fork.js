@@ -111,6 +111,10 @@ TrialTool.Fork = (function(){
                         visible: true,
                         exec: function(){
                             documentation($("div#console-content>textarea").wysiwyg("getContent"));
+                            window.setTimeout(function(){
+                                $("li.saveIcon").css("background", "url('images/fork/saveIcon.png')");
+                            }, 1000);
+                            $("li.saveIcon").css("background", "url('images/fork/example-text.png')");
                         },
                         className: 'saveIcon'
                     }
