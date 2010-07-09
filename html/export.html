@@ -1,7 +1,116 @@
 <html>
     <head>
         <title>Save file</title>
+        <style>
+            html {
+                overflow: auto;
+            }
+            
+            body {
+                font-family: Georgia "Times New Roman", Times, serif;
+                font-size: 14px;
+                padding: 0;
+                max-width: 100%;
+                background-color: #343026;
+                margin: 0 1% 0 1%;
+                min-height: 100%;
+            }
+            
+            #pageCode {
+                display: none;
+            }
+            
+            #content {
+                margin: 1em auto 0 auto;
+                padding: 1em;
+                width: 80%;
+                background-color: white;
+                border-radius: 10px;
+                webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-left: SOLID 3px #000000;
+                border-top: SOLID 3px #000000;
+                line-height: 1.3em;
+            }
+            
+            h1 {
+                text-align: center;
+                font-weight: normal;
+            }
+        </style>
     </head>
     <body>
+        <div id = "content">
+            <h1>Download the example</h1>
+            <div id = "downloadify" style="text-align:center;">
+            </div>
+            <br/>
+            <br/>
+            <hr/>
+            <br/>
+            <div>
+                Steps to host your example using TrialTool
+                <ol>
+                    <li>
+                        Download the TrialTool package to your local machine
+                        <ul>
+                            <li>
+                                Get the <a href = "http://github.com/axemclion/trialtool/zipball/master">zip</a>
+                                or the <a href = "http://github.com/axemclion/trialtool/tarball/master">tarball</a>, and extract it
+                            </li>
+                            <li>
+                                Alternatively, fork the source from github
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Copy the example file that you downloaded as [TrialTool's locatiom]/examples/default.html
+                    </li>
+                    <li>
+                        Use your web server to serve this folder as a web resource 
+                    </li>
+                </ol>
+                <span>In case of problems, <a href = "http://axemclion.github.com/contact.html">contact</a> us. </span>
+            </div>
+        </div>
+        <div id = "pageCode" style ="width : 100%; height : 100%">
+        </div>
+        <script src="../lib/jquery/jquery-1.4.2.min.js" type="text/javascript">
+        </script>
+        <script src="../lib/downloadify/js/swfobject.js" type="text/javascript">
+        </script>
+        <script src="../lib/downloadify/js/downloadify.min.js" type="text/javascript">
+        </script>
+        <script type="text/javascript">
+            function exportedPage(html){
+                document.getElementById("pageCode").innerHTML = html;
+                $("#pageCode textarea.script").each(function(){
+                    $("<__script__>").insertAfter(this).text($(this).val());
+                    $(this).remove();
+                });
+                Downloadify.create('downloadify', {
+                    filename: function(){
+                        return "default.html"
+                    },
+                    data: function(){
+                        return $("#pageCode").html().replace(/<__script__>/g, "<script type = \"text/javascript\">").replace(/<\/__script__>/g, "<\/script>");
+                    },
+                    onComplete: function(){
+                    },
+                    onCancel: function(){
+                    },
+                    onError: function(){
+                    },
+                    swf: '../lib/downloadify/media/downloadify.swf',
+                    downloadImage: '../lib/downloadify/images/download.png',
+                    width: 100,
+                    height: 30,
+                    transparent: true,
+                    append: false
+                });
+            }
+            
+            exportedPage("axe")
+        </script>
     </body>
 </html>

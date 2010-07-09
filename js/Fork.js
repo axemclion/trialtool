@@ -70,7 +70,11 @@ TrialTool.Fork = (function(){
      * Removes the effect of forking and exports the examples in a new file
      */
     var exportFork = function(){
-        $(".fork").remove();
+        var exportWindow = window.open("html/export.html", "status=false;menubar=false");
+        window.axe = exportWindow;
+        exportWindow.onload = function(){
+            exportWindow.exportedPage($("div#example-sets").html());
+        }
     }
     
     /**
@@ -111,6 +115,10 @@ TrialTool.Fork = (function(){
                         visible: true,
                         exec: function(){
                             documentation($("div#console-content>textarea").wysiwyg("getContent"));
+                            window.setTimeout(function(){
+                                $("li.saveIcon").css("background", "url('images/fork/saveIcon.png')");
+                            }, 1000);
+                            $("li.saveIcon").css("background", "url('images/fork/example-text.png')");
                         },
                         className: 'saveIcon'
                     }
@@ -153,6 +161,8 @@ TrialTool.Fork = (function(){
         toolBarButton("Fork", "Create a new example based on this example").appendTo("ul#fork-toolbar");
         
         $("a.fork-toolbar-button").live("click", function(e){
+            e.preventDefault();
+            e.stopPropagation();
             switch ($(this).attr("id")) {
                 case "Fork":
                     startFork();
@@ -162,8 +172,8 @@ TrialTool.Fork = (function(){
                     window.location.reload();
                 case "Save_Fork":
                     endFork();
-                    exportFork();
                     toolBarButton("Fork", "Create a new example based on this example").appendTo("ul#fork-toolbar");
+                    exportFork();
                     break;
                 case "Save_Code":
                     $("a.example-name-selected").siblings("textarea.script").val(TrialTool.getCode());
@@ -174,8 +184,6 @@ TrialTool.Fork = (function(){
                     }, 3000);
                     break;
             }
-            e.preventDefault();
-            e.stopPropagation();
         });
         
         // Adding mouse events for hover on example
