@@ -70,7 +70,7 @@ TrialTool.Fork = (function(){
      * Removes the effect of forking and exports the examples in a new file
      */
     var exportFork = function(){
-        var exportWindow = window.open("html/export.html");
+        var exportWindow = window.open("html/export.html", "status=false;menubar=false");
         window.axe = exportWindow;
         exportWindow.onload = function(){
             exportWindow.exportedPage($("div#example-sets").html());

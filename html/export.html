@@ -35,45 +35,43 @@
             
             h1 {
                 text-align: center;
-            }
-            
-            #downloadify {
-                width: auto;
-            }
-            
-            #downloadResult {
-                float: right;
-                width: 16px;
-                height: 16px;
+                font-weight: normal;
             }
         </style>
     </head>
     <body>
         <div id = "content">
-            <h1>Save the example you created</h1>
-            <ol>
-                <li>
-                    Download TrialTool using one of the following methods
-                    <ul>
-                        <li>
-                            Download the zip or tar files
-                        </li>
-                        <li>
-                            Use GIT to get the source from github
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    Save the example 
-                    <div id = "downloadResult">
-                    </div>
-                    <div id = "downloadify">
-                    </div>
-                </li>
-                <li>
-                    Unzip TrialTools and place the example file in the directory 
-                </li>
-            </ol>
+            <h1>Download the example</h1>
+            <div id = "downloadify" style="text-align:center;">
+            </div>
+            <br/>
+            <br/>
+            <hr/>
+            <br/>
+            <div>
+                Steps to host your example using TrialTool
+                <ol>
+                    <li>
+                        Download the TrialTool package to your local machine
+                        <ul>
+                            <li>
+                                Get the <a href = "http://github.com/axemclion/trialtool/zipball/master">zip</a>
+                                or the <a href = "http://github.com/axemclion/trialtool/tarball/master">tarball</a>, and extract it
+                            </li>
+                            <li>
+                                Alternatively, fork the source from github
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Copy the example file that you downloaded as [TrialTool's locatiom]/examples/default.html
+                    </li>
+                    <li>
+                        Use your web server to serve this folder as a web resource 
+                    </li>
+                </ol>
+                <span>In case of problems, <a href = "http://axemclion.github.com/contact.html">contact</a> us. </span>
+            </div>
         </div>
         <div id = "pageCode" style ="width : 100%; height : 100%">
         </div>
@@ -92,7 +90,7 @@
                 });
                 Downloadify.create('downloadify', {
                     filename: function(){
-                        return "example.html"
+                        return "default.html"
                     },
                     data: function(){
                         return $("#pageCode").html().replace(/<__script__>/g, "<script type = \"text/javascript\">").replace(/<\/__script__>/g, "<\/script>");
@@ -111,6 +109,8 @@
                     append: false
                 });
             }
+            
+            exportedPage("axe")
         </script>
     </body>
 </html>
