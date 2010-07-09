@@ -70,7 +70,7 @@ TrialTool.Fork = (function(){
      * Removes the effect of forking and exports the examples in a new file
      */
     var exportFork = function(){
-        var exportWindow = window.open("html/export.html", "status=false;menubar=false");
+        var exportWindow = window.open("html/export.html");
         window.axe = exportWindow;
         exportWindow.onload = function(){
             exportWindow.exportedPage($("div#example-sets").html());
@@ -157,7 +157,7 @@ TrialTool.Fork = (function(){
         // Adding the toolbar where fork buttons will be added 
         $("<ul>", {
             "id": "fork-toolbar"
-        }).appendTo("div#examples-title");
+        }).prependTo("div#examples-title");
         toolBarButton("Fork", "Create a new example based on this example").appendTo("ul#fork-toolbar");
         
         $("a.fork-toolbar-button").live("click", function(e){

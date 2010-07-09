@@ -39,11 +39,11 @@ span.example-edit input {
 }
 
 ul#fork-toolbar {
-    display: inline;
     margin: 0;
-    float: right;
+    padding: 0;
     list-style: none;
     font-size: 0.8em;
+    float: right;
 }
 
 ul#fork-toolbar li {

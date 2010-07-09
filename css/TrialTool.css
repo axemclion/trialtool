@@ -64,7 +64,7 @@ div#examples-title {
     overflow: hidden;
     background-color: #ABCEDF;
     border-radius-topleft: 5px;
-    -webkit-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
     -moz-border-radius-topleft: 5px;
 }
 
@@ -154,19 +154,19 @@ ul.toolbar a {
 ul.toolbar li:first-child a {
     border-radius-bottomleft: 5px;
     -moz-border-radius-bottomleft: 5px;
-    -webkit-border-radius-bottomleft: 5px;
+    -webkit-border-bottom-left-radius: 5px;
     border-radius-topleft: 5px;
     -moz-border-radius-topleft: 5px;
-    -webkit-border-radius-topleft: 5px;
+    -webkit-border-top-left-radius: 5px;
 }
 
 ul.toolbar li:last-child a {
     border-radius-bottomright: 5px;
     -moz-border-radius-bottomright: 5px;
-    -webkit-border-radius-bottomright: 5px;
+    -webkit-border-bottom-right-radius: 5px;
     border-radius-topright: 5px;
     -moz-border-radius-topright: 5px;
-    -webkit-border-radius-topright: 5px;
+    -webkit-border-top-right-radius: 5px;
 }
 
 ul.toolbar a:hover {
@@ -228,7 +228,7 @@ ul#console-toolbar a {
     width: 100%;
     height: 100%;
     cursor: pointer;
-    margin: 12px 0 0 8px;
+    margin: 12px 0 0 12px;
 }
 
 div#console-content {
