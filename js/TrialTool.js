@@ -16,24 +16,7 @@ var TrialTool = (function(){
     });
     
     $("a.example-name").live("click", function(e){
-        var example = $(this).parent();
-        showCode(example.children("textarea.script").val());
-        currentSelection = example;
-        $("a.example-name-selected").removeClass("example-name-selected");
-        $(this).addClass("example-name-selected");
-        var docs = example.children(".example-docs");
-        if (docs.length > 0) {
-            if (docs.get(0).nodeName === "LINK") {
-                $("div#docs").html($(docs.attr("href")).html());
-            }
-            else {
-                $("div#docs").html(docs.html());
-                
-            }
-        }
-        else {
-            $("div#docs").html("No documentation provided");
-        }
+        selectExample(this);
         e.preventDefault();
     });
     
@@ -65,6 +48,32 @@ var TrialTool = (function(){
                 break;
         }
     });
+    
+    /**
+     * Selects an example
+     * @param {Object} exampleNode
+     */
+    var selectExample = function(exampleNode){
+        var example = $(exampleNode).parent();
+        showCode(example.children("textarea.script").val());
+        currentSelection = example;
+        $("a.example-name-selected").removeClass("example-name-selected");
+        $(exampleNode).addClass("example-name-selected");
+        var docs = example.children(".example-docs");
+        if (docs.length > 0) {
+            if (docs.get(0).nodeName === "LINK") {
+                $("div#docs").html($(docs.attr("href")).html());
+            }
+            else {
+                $("div#docs").html(docs.html());
+            }
+        }
+        else {
+            $("div#docs").html("No documentation provided");
+        }
+        var selector = $(exampleNode).parent().attr("id");
+        urlHelper.setKey("selected", (selector) ? ("#" + selector) : $(exampleNode).html().replace(/^\s+|\s+$/g, ''));
+    }
     
     var runCode = function(code){
         TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
@@ -129,10 +138,15 @@ var TrialTool = (function(){
     
     var showCode = function(code){
         if (!code) {
-            code = $("#code").val();
+            code = $("#code").val() || "";
         }
-        editor.setCode(code.replace(/^\s+|\s+$/g, ''));
-        editor.reindent();
+        try {
+            editor.setCode(code.replace(/^\s+|\s+$/g, ''));
+            editor.reindent();
+        } 
+        catch (e) {
+        
+        }
     }
     
     var showDocs = function(flag){
@@ -198,6 +212,128 @@ var TrialTool = (function(){
     resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
     
     /**
+     * Loads a new example from a URL
+     * @param {Object} example
+     */
+    var loadExamples = function(urls, callback){
+        if (typeof(urls) === "string") {
+            urls = [urls];
+        }
+        var remainingUrls = urls.length, errorCount = 0;
+        if (!urls.length) {
+            callback(true);
+            return;
+        }
+        $.each(urls, function(i){
+            $.ajax({
+                "type": "GET",
+                "datatype": "html",
+                "url": this + "?" + Math.random(),
+                dataFilter: function(data, type){
+                    return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
+                },
+                "success": function(data){
+                    $("div#example-sets").append($(data));
+                    $("div#example-sets *").hide();
+                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
+                },
+                "complete": function(xhr, status){
+                    (status === "error") && (errorCount++);
+                    remainingUrls--;
+                    if (!remainingUrls && typeof(callback) === "function") {
+                        callback(urls.length === errorCount);
+                    }
+                }
+            });
+        });
+    }
+    
+    /**
+     * Parsing the
+     */
+    var urlHelper = (function(){
+        var qMap = {}, location, q;
+        var init = function(){
+            var url = document.location.href;
+            var start = Math.min(url.indexOf("?") < 0 ? Infinity : url.indexOf("?"), url.indexOf("#") < 0 ? Infinity : url.indexOf("#"));
+            location = url.substring(0, start);
+            q = url.substring(start + 1);
+            var qParams = q.split("&");
+            qMap = {
+                "example": []
+            };
+            for (var i = 0; i < qParams.length; i++) {
+                var key = qParams[i].substring(0, qParams[i].indexOf("="));
+                if (key === "example") {
+                    qMap.example.push(qParams[i].substring(qParams[i].indexOf("=") + 1))
+                }
+                else {
+                    qMap[key] = qParams[i].substring(qParams[i].indexOf("=") + 1);
+                }
+            }
+        }
+        init();
+        return {
+            getKey: function(key){
+                return qMap[key];
+            },
+            setKey: function(key, value){
+                qMap[key] = value;
+                var params = ["#"];
+                for (key in qMap) {
+                    var value = (key === "example" ? (qMap[key].join("&example")) : qMap[key]);
+                    key && value && params.push([key, "=", value, "&"].join(""));
+                }
+                document.location = location + params.join("")
+            },
+            refresh: function(){
+                init();
+            }
+        }
+    })();
+    
+    /**
+     * First function that is called to initialize TrialTool
+     */
+    var init = function(){
+        // Loading the examples from 
+        var exampleLoadSequence = [urlHelper.getKey("example"), ["examples/default.html"], ["examples/Template.html"]];
+        var loadExampleFromSequence = function(i){
+            if (i >= exampleLoadSequence.length) {
+                return;
+            }
+            loadExamples(exampleLoadSequence[i], function(hasFailed){
+                if (hasFailed) {
+                    loadExampleFromSequence(i + 1);
+                }
+                else {
+                    window.setTimeout(function(){
+                        // Selecting example if sepcified
+                        var selector = urlHelper.getKey("selected");
+                        if (selector && selector.indexOf("#") === 0) {
+                            selectExample($(selector).children("a:first"));
+                        }
+                        else if (selector) {
+                            $("a.example-name").each(function(){
+                                if (unescape(selector) === $(this).html().replace(/^\s+|\s+$/g, '')) {
+                                    selectExample(this);
+                                }
+                            });
+                        }
+                    }, 2000);
+                }
+            });
+            (i >= exampleLoadSequence.length - 1) && urlHelper.setKey("fork", true);
+        };
+        loadExampleFromSequence(0);
+        
+        //Fork if the flag is set
+        if (urlHelper.getKey("fork")) {
+            $.getScript("js/Fork.js");
+        }
+    }
+    init();
+    /**
      * Uses codemirror to initialize a code editor
      */
     var editor = null;
@@ -213,28 +349,6 @@ var TrialTool = (function(){
         });
     });
     return {
-        /**
-         * Adds a new example to
-         * @param {Object} example
-         */
-        loadExamples: function(url){
-            $.ajax({
-                "type": "GET",
-                "datatype": "html",
-                "url": url + "?" + Math.random(),
-                dataFilter: function(data, type){
-                    return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
-                },
-                "success": function(data){
-                    $("div#example-sets").append($(data));
-                    $("div#example-sets *").hide();
-                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
-                },
-                "error": function(data, errorString, m){
-                    alert("Could not load " + url);
-                }
-            });
-        },
         executeInWindow: function(code, contentWindow){
             try {
                 if (!contentWindow.eval && contentWindow.execScript) {
@@ -251,11 +365,3 @@ var TrialTool = (function(){
         }
     };
 })();
-
-
-var url = document.location.href;
-url = url.substring((url.indexOf("#") + 1) || url.length);
-url = url || "examples/Template.html";
-$.each(url.split("&"), function(){
-    TrialTool.loadExamples(this);
-});
