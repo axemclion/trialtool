@@ -138,10 +138,15 @@ var TrialTool = (function(){
     
     var showCode = function(code){
         if (!code) {
-            code = $("#code").val();
+            code = $("#code").val() || "";
         }
-        editor.setCode(code.replace(/^\s+|\s+$/g, ''));
-        editor.reindent();
+        try {
+            editor.setCode(code.replace(/^\s+|\s+$/g, ''));
+            editor.reindent();
+        } 
+        catch (e) {
+        
+        }
     }
     
     var showDocs = function(flag){
@@ -298,23 +303,24 @@ var TrialTool = (function(){
                 return;
             }
             loadExamples(exampleLoadSequence[i], function(hasFailed){
-                console.log(hasFailed);
                 if (hasFailed) {
                     loadExampleFromSequence(i + 1);
                 }
                 else {
-                    // Selecting example if sepcified
-                    var selector = urlHelper.getKey("selected");
-                    if (selector && selector.indexOf("#") === 0) {
-                        selectExample($(selector).children("a:first"));
-                    }
-                    else if (selector) {
-                        $("a.example-name").each(function(){
-                            if ($(this).html().replace(/^\s+|\s+$/g, '') === selector) {
-                                selectExample(exampleName);
-                            }
-                        });
-                    }
+                    window.setTimeout(function(){
+                        // Selecting example if sepcified
+                        var selector = urlHelper.getKey("selected");
+                        if (selector && selector.indexOf("#") === 0) {
+                            selectExample($(selector).children("a:first"));
+                        }
+                        else if (selector) {
+                            $("a.example-name").each(function(){
+                                if (unescape(selector) === $(this).html().replace(/^\s+|\s+$/g, '')) {
+                                    selectExample(this);
+                                }
+                            });
+                        }
+                    }, 2000);
                 }
             });
             (i >= exampleLoadSequence.length - 1) && urlHelper.setKey("fork", true);
