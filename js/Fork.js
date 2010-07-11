@@ -169,7 +169,9 @@ TrialTool.Fork = (function(){
                     $(this).parent().remove();
                     break;
                 case "Cancel_Fork":
+                    endFork();
                     window.location.reload();
+                    break;
                 case "Save_Fork":
                     endFork();
                     toolBarButton("Fork", "Create a new example based on this example").appendTo("ul#fork-toolbar");
