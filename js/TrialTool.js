@@ -198,6 +198,97 @@ var TrialTool = (function(){
     resizePanes([$("div#top-pane"), $("div#horizontal-thumb"), $("div#console")], "y");
     
     /**
+     * Loads a new example from a URL
+     * @param {Object} example
+     */
+    var loadExamples = function(url, callback){
+        $.ajax({
+            "type": "GET",
+            "datatype": "html",
+            "url": url + "?" + Math.random(),
+            dataFilter: function(data, type){
+                return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
+            },
+            "success": function(data){
+                $("div#example-sets").append($(data));
+                $("div#example-sets *").hide();
+                $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
+                (typeof(callback) === "function") && callback(true, data);
+            },
+            "error": function(data, errorString){
+                (typeof(callback) === "function") && callback(false, data, errorString);
+            }
+        });
+    }
+    
+    /**
+     * Parsing the
+     */
+    var urlHelper = (function(){
+        var qMap = {};
+        var init = function(){
+            var url = document.location.href;
+            var start = Math.min(url.indexOf("?") < 0 ? Infinity : url.indexOf("?"), url.indexOf("#") < 0 ? Infinity : url.indexOf("#"));
+            var q = url.substring(start + 1);
+            var qParams = q.split("&");
+            qMap = {
+                "example": []
+            };
+            for (var i = 0; i < qParams.length; i++) {
+                var key = qParams[i].substring(0, qParams[i].indexOf("="));
+                if (key === "example") {
+                    qMap.example.push(qParams[i].substring(qParams[i].indexOf("=") + 1))
+                }
+                else {
+                    qMap[key] = qParams[i].substring(qParams[i].indexOf("=") + 1);
+                }
+            }
+        }
+        init();
+        return {
+            getKey: function(key){
+                return qMap[key];
+            },
+            setKey: function(key){
+                qMap[key] = "";
+            },
+            refresh: function(){
+                init();
+            }
+        }
+    })();
+    
+    /**
+     * First function that is called to initialize TrialTool
+     */
+    var init = function(){
+        var example = urlHelper.getKey("example");
+        var isExampleLoaded = false;
+        // Load all examples
+        $.each(example, function(){
+            loadExamples(this, function(loadStatus){
+                loadStatus && (isExampleLoaded = true);
+            });
+        });
+        // If no example is loaded, then try loading default
+        if (!isExampleLoaded) {
+            loadExamples("examples/default.html", function(loadStatus){
+                // Did not load default example, so load the template and Fork it
+                if (!loadStatus) {
+                    loadExamples("examples/Template.html");
+                    urlHelper.setKey("fork", true);
+                }
+            });
+            urlHelper.setKey("example", []);
+        }
+        
+        //Fork if the flag is set
+        if (urlHelper.getKey("fork")) {
+            $.getScript("js/Fork.js");
+        }
+    }
+    init();
+    /**
      * Uses codemirror to initialize a code editor
      */
     var editor = null;
@@ -213,28 +304,6 @@ var TrialTool = (function(){
         });
     });
     return {
-        /**
-         * Adds a new example to
-         * @param {Object} example
-         */
-        loadExamples: function(url){
-            $.ajax({
-                "type": "GET",
-                "datatype": "html",
-                "url": url + "?" + Math.random(),
-                dataFilter: function(data, type){
-                    return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
-                },
-                "success": function(data){
-                    $("div#example-sets").append($(data));
-                    $("div#example-sets *").hide();
-                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
-                },
-                "error": function(data, errorString, m){
-                    alert("Could not load " + url);
-                }
-            });
-        },
         executeInWindow: function(code, contentWindow){
             try {
                 if (!contentWindow.eval && contentWindow.execScript) {
@@ -251,11 +320,3 @@ var TrialTool = (function(){
         }
     };
 })();
-
-
-var url = document.location.href;
-url = url.substring((url.indexOf("#") + 1) || url.length);
-url = url || "examples/Template.html";
-$.each(url.split("&"), function(){
-    TrialTool.loadExamples(this);
-});
