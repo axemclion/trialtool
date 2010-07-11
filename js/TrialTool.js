@@ -16,24 +16,7 @@ var TrialTool = (function(){
     });
     
     $("a.example-name").live("click", function(e){
-        var example = $(this).parent();
-        showCode(example.children("textarea.script").val());
-        currentSelection = example;
-        $("a.example-name-selected").removeClass("example-name-selected");
-        $(this).addClass("example-name-selected");
-        var docs = example.children(".example-docs");
-        if (docs.length > 0) {
-            if (docs.get(0).nodeName === "LINK") {
-                $("div#docs").html($(docs.attr("href")).html());
-            }
-            else {
-                $("div#docs").html(docs.html());
-                
-            }
-        }
-        else {
-            $("div#docs").html("No documentation provided");
-        }
+        selectExample(this);
         e.preventDefault();
     });
     
@@ -65,6 +48,32 @@ var TrialTool = (function(){
                 break;
         }
     });
+    
+    /**
+     * Selects an example
+     * @param {Object} exampleNode
+     */
+    var selectExample = function(exampleNode){
+        var example = $(exampleNode).parent();
+        showCode(example.children("textarea.script").val());
+        currentSelection = example;
+        $("a.example-name-selected").removeClass("example-name-selected");
+        $(exampleNode).addClass("example-name-selected");
+        var docs = example.children(".example-docs");
+        if (docs.length > 0) {
+            if (docs.get(0).nodeName === "LINK") {
+                $("div#docs").html($(docs.attr("href")).html());
+            }
+            else {
+                $("div#docs").html(docs.html());
+            }
+        }
+        else {
+            $("div#docs").html("No documentation provided");
+        }
+        var selector = $(exampleNode).parent().attr("id");
+        urlHelper.setKey("selected", (selector) ? ("#" + selector) : $(exampleNode).html().replace(/^\s+|\s+$/g, ''));
+    }
     
     var runCode = function(code){
         TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
@@ -201,23 +210,36 @@ var TrialTool = (function(){
      * Loads a new example from a URL
      * @param {Object} example
      */
-    var loadExamples = function(url, callback){
-        $.ajax({
-            "type": "GET",
-            "datatype": "html",
-            "url": url + "?" + Math.random(),
-            dataFilter: function(data, type){
-                return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
-            },
-            "success": function(data){
-                $("div#example-sets").append($(data));
-                $("div#example-sets *").hide();
-                $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
-                (typeof(callback) === "function") && callback(true, data);
-            },
-            "error": function(data, errorString){
-                (typeof(callback) === "function") && callback(false, data, errorString);
-            }
+    var loadExamples = function(urls, callback){
+        if (typeof(urls) === "string") {
+            urls = [urls];
+        }
+        var remainingUrls = urls.length, errorCount = 0;
+        if (!urls.length) {
+            callback(true);
+            return;
+        }
+        $.each(urls, function(i){
+            $.ajax({
+                "type": "GET",
+                "datatype": "html",
+                "url": this + "?" + Math.random(),
+                dataFilter: function(data, type){
+                    return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
+                },
+                "success": function(data){
+                    $("div#example-sets").append($(data));
+                    $("div#example-sets *").hide();
+                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
+                },
+                "complete": function(xhr, status){
+                    (status === "error") && (errorCount++);
+                    remainingUrls--;
+                    if (!remainingUrls && typeof(callback) === "function") {
+                        callback(urls.length === errorCount);
+                    }
+                }
+            });
         });
     }
     
@@ -225,11 +247,12 @@ var TrialTool = (function(){
      * Parsing the
      */
     var urlHelper = (function(){
-        var qMap = {};
+        var qMap = {}, location, q;
         var init = function(){
             var url = document.location.href;
             var start = Math.min(url.indexOf("?") < 0 ? Infinity : url.indexOf("?"), url.indexOf("#") < 0 ? Infinity : url.indexOf("#"));
-            var q = url.substring(start + 1);
+            location = url.substring(0, start);
+            q = url.substring(start + 1);
             var qParams = q.split("&");
             qMap = {
                 "example": []
@@ -249,8 +272,14 @@ var TrialTool = (function(){
             getKey: function(key){
                 return qMap[key];
             },
-            setKey: function(key){
-                qMap[key] = "";
+            setKey: function(key, value){
+                qMap[key] = value;
+                var params = ["#"];
+                for (key in qMap) {
+                    var value = (key === "example" ? (qMap[key].join("&example")) : qMap[key]);
+                    key && value && params.push([key, "=", value, "&"].join(""));
+                }
+                document.location = location + params.join("")
             },
             refresh: function(){
                 init();
@@ -262,25 +291,35 @@ var TrialTool = (function(){
      * First function that is called to initialize TrialTool
      */
     var init = function(){
-        var example = urlHelper.getKey("example");
-        var isExampleLoaded = false;
-        // Load all examples
-        $.each(example, function(){
-            loadExamples(this, function(loadStatus){
-                loadStatus && (isExampleLoaded = true);
-            });
-        });
-        // If no example is loaded, then try loading default
-        if (!isExampleLoaded) {
-            loadExamples("examples/default.html", function(loadStatus){
-                // Did not load default example, so load the template and Fork it
-                if (!loadStatus) {
-                    loadExamples("examples/Template.html");
-                    urlHelper.setKey("fork", true);
+        // Loading the examples from 
+        var exampleLoadSequence = [urlHelper.getKey("example"), ["examples/default.html"], ["examples/Template.html"]];
+        var loadExampleFromSequence = function(i){
+            if (i >= exampleLoadSequence.length) {
+                return;
+            }
+            loadExamples(exampleLoadSequence[i], function(hasFailed){
+                console.log(hasFailed);
+                if (hasFailed) {
+                    loadExampleFromSequence(i + 1);
+                }
+                else {
+                    // Selecting example if sepcified
+                    var selector = urlHelper.getKey("selected");
+                    if (selector && selector.indexOf("#") === 0) {
+                        selectExample($(selector).children("a:first"));
+                    }
+                    else if (selector) {
+                        $("a.example-name").each(function(){
+                            if ($(this).html().replace(/^\s+|\s+$/g, '') === selector) {
+                                selectExample(exampleName);
+                            }
+                        });
+                    }
                 }
             });
-            urlHelper.setKey("example", []);
-        }
+            (i >= exampleLoadSequence.length - 1) && urlHelper.setKey("fork", true);
+        };
+        loadExampleFromSequence(0);
         
         //Fork if the flag is set
         if (urlHelper.getKey("fork")) {
