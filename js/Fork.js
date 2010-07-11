@@ -26,7 +26,9 @@ TrialTool.Fork = (function(){
         }
         toolbar.append(iconButton("example-remove", "Delete this example"));
         
-        toolbar.append($("<input>").hide());
+        toolbar.append($("<input>", {
+            "class": "example-newname-text"
+        }).hide());
         toolbar.append(iconButton("example-text", "Accept the new name for this example").hide());
         toolbar.append(iconButton("example-cancel", "Cancel the changes to the example").hide());
         return toolbar;
@@ -208,12 +210,13 @@ TrialTool.Fork = (function(){
                 node.remove();
             }
             else if (button.hasClass("example-rename")) {
-                button.siblings("input").val(a.text()).attr("title", a.text());
-                a.text("");
                 button.parent().children().each(function(){
                     $(this).css("display", $(this).css("display") === "none" ? "inline" : "none");
                 });
+                button.siblings("input").val(a.text()).attr("title", a.text());
+                a.text("");
                 isEditingExample = true;
+                button.siblings("input").get(0).select();
             }
             else if (button.hasClass("example-text")) {
                 a.text(button.siblings("input").val());
@@ -241,6 +244,16 @@ TrialTool.Fork = (function(){
                 node.append(li.append("<ul>"));
             }
             return false;
+        });
+        
+        $("input.example-newname-text").live("keypress", function(e){
+            if (e.keyCode === 13) {
+                $(this).siblings("img.example-text").trigger("click");
+            }
+            else if (e.keyCode === 27) {
+                $(this).siblings("img.example-cancel").trigger("click");
+            }
+            
         });
     }
     runOnce();
