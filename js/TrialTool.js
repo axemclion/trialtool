@@ -215,12 +215,12 @@ var TrialTool = (function(){
      * Loads a new example from a URL
      * @param {Object} example
      */
-    var loadExamples = function(urls, callback){
+    var loadExamples = function(urls, parentNode, callback){
         if (typeof(urls) === "string") {
             urls = [urls];
         }
         var remainingUrls = urls.length, errorCount = 0;
-        if (!urls.length) {
+        if (!urls.length && typeof(callback) === "function") {
             callback(true);
             return;
         }
@@ -233,9 +233,13 @@ var TrialTool = (function(){
                     return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
                 },
                 "success": function(data){
-                    $("div#example-sets").append($(data));
-                    $("div#example-sets *").hide();
-                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
+                    $(parentNode).append(data);
+                    $(parentNode).find("*").hide();
+                    $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
+                    // replace all links with actual examples
+                    $(parentNode).find("li.example-link").each(function(){
+                        loadExamples($(this).attr("href"), this);
+                    });
                 },
                 "complete": function(xhr, status){
                     (status === "error") && (errorCount++);
@@ -302,7 +306,7 @@ var TrialTool = (function(){
             if (i >= exampleLoadSequence.length) {
                 return;
             }
-            loadExamples(exampleLoadSequence[i], function(hasFailed){
+            loadExamples(exampleLoadSequence[i], "div#example-sets", function(hasFailed){
                 if (hasFailed) {
                     loadExampleFromSequence(i + 1);
                 }
