@@ -7,7 +7,6 @@ $("span.log-object, span.log-array").live("click", function(){
         $(this).removeClass("log-opened");
     }
 });
-
 function write(){
     var text = document.createElement("div");
     var msg = [];
@@ -19,6 +18,7 @@ function write(){
     window.scroll(0, $("#console").height());
     return text;
 };
+
 document.write = write;
 
 function writeError(e){
@@ -37,19 +37,18 @@ function getDomFromJSON(data){
         }
         result.push("</ol></span>");
     }
-    else 
-        if (typeof(data) === "object") {
-            result = ["<span class = 'log-object'>&nbsp;<u>[Object]</u>&nbsp;"];
-            result.push("<ul style = 'display:none'>");
-            for (x in data) {
-                result.push("<li>" + x);
-                result.push(":" + getDomFromJSON(data[x]));
-                result.push("</li>")
-            }
-            result.push("</ul></span>");
+    else if (typeof(data) === "object") {
+        result = ["<span class = 'log-object'>&nbsp;<u>[Object]</u>&nbsp;"];
+        result.push("<ul style = 'display:none'>");
+        for (x in data) {
+            result.push("<li>" + x);
+            result.push(":" + getDomFromJSON(data[x]));
+            result.push("</li>")
         }
-        else {
-            result = ["<span class = 'log-item'>", data, "</span>"];
-        }
+        result.push("</ul></span>");
+    }
+    else {
+        result = ["<span class = 'log-item'>", data, "</span>"];
+    }
     return result.join("");
 }

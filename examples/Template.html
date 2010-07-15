@@ -1,11 +1,26 @@
 <html>
     <head>
         <title>Trial Tool Example Template</title>
-        <script type = "text/javascript" src= "../lib/jquery/jquery-1.4.2.min.js">
-        </script>
         <script>
-            alert(window.location);
+            document.write("This document is located at : " + document.location + "<br/>");
+            document.write("Inline Script loaded<br/>");
+            
+            var innerStyle = document.createElement("div");
+            innerStyle.innerHTML = "Inner  Styles <span class = 'inner-style' >not</span> loaded";
+            document.body.appendChild(innerStyle);
+            
+            var outerStyle = document.createElement("div");
+            outerStyle.innerHTML = "Outer Styles <span class = 'outer-style' >not</span> loaded";
+            document.body.appendChild(outerStyle);
         </script>
+        <script src="examples/externalRef.js" type="text/javascript">
+        </script>
+        <style>
+            .inner-style {
+                display: none;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href = "examples/externalRef.css"/>
     </head>
     <body>
         <ul>
@@ -30,7 +45,16 @@
                             // This example depends on example 1.1 and requires example 1.1 to be executed first.
                             // Click on the "Load Pre-requisites" button at the top to load code for example 1 also
                             var b = 20;
+                            var c = {
+                                "a": 10,
+                                "b": {
+                                    "a": 20,
+                                    "b": 30
+                                },
+                                "c": [10, 20, 30]
+                            };
                             document.write("Sum of a and b is ", a + b);
+                            document.write("JSON - ", c, c.b, c.c);
                             document.write("Executed example 1.2");
                         </script>
                     </li>
