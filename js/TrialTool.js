@@ -75,6 +75,10 @@ var TrialTool = (function(){
         urlHelper.setKey("selected", (selector) ? ("#" + selector) : $(exampleNode).html().replace(/^\s+|\s+$/g, ''));
     }
     
+    /**
+     * Executes code in the context of the console
+     * @param {Object} code
+     */
     var runCode = function(code){
         TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
     }
@@ -215,12 +219,12 @@ var TrialTool = (function(){
      * Loads a new example from a URL
      * @param {Object} example
      */
-    var loadExamples = function(urls, callback){
+    var loadExamples = function(urls, parentNode, callback){
         if (typeof(urls) === "string") {
             urls = [urls];
         }
         var remainingUrls = urls.length, errorCount = 0;
-        if (!urls.length) {
+        if (!urls.length && typeof(callback) === "function") {
             callback(true);
             return;
         }
@@ -230,12 +234,51 @@ var TrialTool = (function(){
                 "datatype": "html",
                 "url": this + "?" + Math.random(),
                 dataFilter: function(data, type){
-                    return data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
+                    // Replacing the script tag so that it is not executed
+                    data = data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
+                    // Replacing head and body tag so that they are not lost during JQuery .load() call
+                    data = data.replace(/<body/g, "<div class='__html_body__'").replace(/<\/body>/g, "</div>");
+                    data = data.replace(/<head/g, "<div class='__html_head__'").replace(/<\/head>/g, "</div>");
+                    return data;
                 },
                 "success": function(data){
-                    $("div#example-sets").append($(data));
-                    $("div#example-sets *").hide();
-                    $("div#example-sets ul, div#example-sets li, div#example-sets a").show();
+                    $(parentNode).append($(data).filter("div.__html_body__").children());
+					$(parentNode).css("padding-top", "1px"); // If not done, IE gives it padding.
+                    $(parentNode).find("*").hide();
+                    $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
+                    // adding script and stylesheets that are in header to the console
+                    var head = $(data).filter("div.__html_head__");
+                    head.children("textarea.script").each(function(){
+                        if ($(this).attr("src")) {
+                            runCode("document.getElementsByTagName('head')[0].appendChild(document.createElement('script')).setAttribute('src','" + $(this).attr("src") + "');");
+                        }
+                        else {
+                            runCode($(this).val());
+                        }
+                    });
+                    
+                    // Add styles using the tag
+                    var w = $("#console-iframe").get(0).contentWindow
+                    head.children("style").each(function(){
+                        var head = w.document.getElementsByTagName('head')[0];
+                        var style = w.document.createElement('style');
+                        var rules = w.document.createTextNode($(this).html());
+                        style.type = 'text/css';
+                        if (style.styleSheet) 
+                            style.styleSheet.cssText = rules.nodeValue;
+                        else 
+                            style.appendChild(rules);
+                        head.appendChild(style);
+                    });
+                    head.children("link").each(function(){
+                        runCode("var x = document.createElement('link'); x.setAttribute('rel','stylesheet');x.setAttribute('href','" + $(this).attr("href") + "');document.getElementsByTagName('head')[0].appendChild(x)");
+                    });
+                    
+                    // replace all links with actual examples
+                    $(parentNode).find("li.example-link").each(function(){
+                        loadExamples($(this).attr("href"), this);
+                        
+                    });
                 },
                 "complete": function(xhr, status){
                     (status === "error") && (errorCount++);
@@ -302,7 +345,7 @@ var TrialTool = (function(){
             if (i >= exampleLoadSequence.length) {
                 return;
             }
-            loadExamples(exampleLoadSequence[i], function(hasFailed){
+            loadExamples(exampleLoadSequence[i], "div#example-sets", function(hasFailed){
                 if (hasFailed) {
                     loadExampleFromSequence(i + 1);
                 }
