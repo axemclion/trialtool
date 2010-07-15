@@ -243,6 +243,7 @@ var TrialTool = (function(){
                 },
                 "success": function(data){
                     $(parentNode).append($(data).filter("div.__html_body__").children());
+					$(parentNode).css("padding-top", "1px"); // If not done, IE gives it padding.
                     $(parentNode).find("*").hide();
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
                     // adding script and stylesheets that are in header to the console
@@ -276,6 +277,7 @@ var TrialTool = (function(){
                     // replace all links with actual examples
                     $(parentNode).find("li.example-link").each(function(){
                         loadExamples($(this).attr("href"), this);
+                        
                     });
                 },
                 "complete": function(xhr, status){
