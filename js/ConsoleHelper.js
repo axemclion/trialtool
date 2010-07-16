@@ -48,7 +48,7 @@ function getDomFromJSON(data){
         result.push("</ul></span>");
     }
     else {
-        result = ["<span class = 'log-item'>", data, "</span>"];
+        result = ["<span class = 'log-item'>", data.replace(/</g,"&lt;").replace(/>/g,"&gt;"), "</span>"];
     }
     return result.join("");
 }

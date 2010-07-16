@@ -71,6 +71,7 @@ var TrialTool = (function(){
         else {
             $("div#docs").html("No documentation provided");
         }
+		$("div#docs *").show();
         var selector = $(exampleNode).parent().attr("id");
         urlHelper.setKey("selected", (selector) ? ("#" + selector) : $(exampleNode).html().replace(/^\s+|\s+$/g, ''));
     }
