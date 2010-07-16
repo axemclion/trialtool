@@ -55,7 +55,7 @@ var TrialTool = (function(){
      */
     var selectExample = function(exampleNode){
         var example = $(exampleNode).parent();
-        showCode(example.children("textarea.script").val());
+        showCode(example.children("script").html());
         currentSelection = example;
         $("a.example-name-selected").removeClass("example-name-selected");
         $(exampleNode).addClass("example-name-selected");
@@ -133,7 +133,7 @@ var TrialTool = (function(){
                 "module": node.children("a.example-name").contents().filter(function(){
                     return this.nodeType == 3;
                 }).text(),
-                "code": node.children("textarea.script").val()
+                "code": node.children("script").html()
             });
         }
         //console.groupEnd();
@@ -231,35 +231,34 @@ var TrialTool = (function(){
         $.each(urls, function(i){
             $.ajax({
                 "type": "GET",
-                "datatype": "html",
-                "url": this + "?" + Math.random(),
-                dataFilter: function(data, type){
-                    // Replacing the script tag so that it is not executed
-                    data = data.replace(/<script/g, "<textarea class = 'script' ").replace(/<\/script>/g, "</textarea>");
-                    // Replacing head and body tag so that they are not lost during JQuery .load() call
-                    data = data.replace(/<body/g, "<div class='__html_body__'").replace(/<\/body>/g, "</div>");
-                    data = data.replace(/<head/g, "<div class='__html_head__'").replace(/<\/head>/g, "</div>");
-                    return data;
-                },
+                "datatype": "text",
+                "url": this,
                 "success": function(data){
-                    $(parentNode).append($(data).filter("div.__html_body__").children());
-					$(parentNode).css("padding-top", "1px"); // If not done, IE gives it padding.
+                    $(parentNode).get(0).innerHTML = data.substring(data.indexOf("<body>") + 6, data.indexOf("</body>"));
                     $(parentNode).find("*").hide();
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
+                    
                     // adding script and stylesheets that are in header to the console
-                    var head = $(data).filter("div.__html_head__");
-                    head.children("textarea.script").each(function(){
+                    head = $();
+                    try {
+                        head = $(data.substring(data.indexOf("<head>") + 6, data.indexOf("</head>")));
+                    } 
+                    catch (e) {
+                        // This is required as head sometimes is empty and $(" ") is an error
+                        //console.error(e);
+                    }
+                    head.filter("script").each(function(){
                         if ($(this).attr("src")) {
                             runCode("document.getElementsByTagName('head')[0].appendChild(document.createElement('script')).setAttribute('src','" + $(this).attr("src") + "');");
                         }
                         else {
-                            runCode($(this).val());
+                            runCode($(this).html());
                         }
                     });
                     
                     // Add styles using the tag
-                    var w = $("#console-iframe").get(0).contentWindow
-                    head.children("style").each(function(){
+                    var w = $("#console-iframe").get(0).contentWindow;
+                    head.filter("style").each(function(){
                         var head = w.document.getElementsByTagName('head')[0];
                         var style = w.document.createElement('style');
                         var rules = w.document.createTextNode($(this).html());
@@ -270,7 +269,7 @@ var TrialTool = (function(){
                             style.appendChild(rules);
                         head.appendChild(style);
                     });
-                    head.children("link").each(function(){
+                    head.filter("link").each(function(){
                         runCode("var x = document.createElement('link'); x.setAttribute('rel','stylesheet');x.setAttribute('href','" + $(this).attr("href") + "');document.getElementsByTagName('head')[0].appendChild(x)");
                     });
                     
