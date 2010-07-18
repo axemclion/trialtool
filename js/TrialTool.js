@@ -37,14 +37,7 @@ var TrialTool = (function(){
                 runCode("document.getElementById('console').innerHTML = '';")
                 break;
             case "getDependencies":
-                var code = [];
-                visitedNodes = [];
-                $.each(getDependencies(currentSelection), function(){
-                    code.push("/*" + this.module + "*/\n");
-                    code.push(this.code);
-                    code.push("\n\n\n");
-                });
-                showCode(code.join(" "));
+                showCodeWithDependencies();
                 break;
         }
     });
@@ -71,6 +64,7 @@ var TrialTool = (function(){
         else {
             $("div#docs").html("No documentation provided");
         }
+        $("div#docs *").show();
         var selector = $(exampleNode).parent().attr("id");
         urlHelper.setKey("selected", (selector) ? ("#" + selector) : $(exampleNode).html().replace(/^\s+|\s+$/g, ''));
     }
@@ -140,8 +134,27 @@ var TrialTool = (function(){
         return result;
     };
     
+    /**
+     * Shows the code with the dependencies for that module
+     * @param {Object} code
+     */
+    var showCodeWithDependencies = function(){
+        var code = [];
+        visitedNodes = [];
+        $.each(getDependencies(currentSelection), function(){
+            code.push("/*" + this.module + "*/\n");
+            code.push(this.code);
+            code.push("\n\n\n");
+        });
+        showCode(code.join(" "));
+    }
+    
+    /**
+     * Displays the code in the editor part
+     * @param {Object} code
+     */
     var showCode = function(code){
-        if (!code) {
+        if (typeof(code) !== "string") {
             code = $("#code").val() || "";
         }
         try {
@@ -359,20 +372,19 @@ var TrialTool = (function(){
                             $("a.example-name").each(function(){
                                 if (unescape(selector) === $(this).html().replace(/^\s+|\s+$/g, '')) {
                                     selectExample(this);
+                                    showCodeWithDependencies();
                                 }
                             });
                         }
                     }, 2000);
                 }
             });
-            (i >= exampleLoadSequence.length - 1) && urlHelper.setKey("fork", true);
+            if (i >= exampleLoadSequence.length - 1) {
+                urlHelper.setKey("fork", true);
+                urlHelper.getKey("fork") && $.getScript("js/Fork.js");
+            }
         };
         loadExampleFromSequence(0);
-        
-        //Fork if the flag is set
-        if (urlHelper.getKey("fork")) {
-            $.getScript("js/Fork.js");
-        }
     }
     init();
     /**
