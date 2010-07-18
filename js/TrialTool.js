@@ -37,14 +37,7 @@ var TrialTool = (function(){
                 runCode("document.getElementById('console').innerHTML = '';")
                 break;
             case "getDependencies":
-                var code = [];
-                visitedNodes = [];
-                $.each(getDependencies(currentSelection), function(){
-                    code.push("/*" + this.module + "*/\n");
-                    code.push(this.code);
-                    code.push("\n\n\n");
-                });
-                showCode(code.join(" "));
+                showCodeWithDependencies();
                 break;
         }
     });
@@ -141,8 +134,27 @@ var TrialTool = (function(){
         return result;
     };
     
+    /**
+     * Shows the code with the dependencies for that module
+     * @param {Object} code
+     */
+    var showCodeWithDependencies = function(){
+        var code = [];
+        visitedNodes = [];
+        $.each(getDependencies(currentSelection), function(){
+            code.push("/*" + this.module + "*/\n");
+            code.push(this.code);
+            code.push("\n\n\n");
+        });
+        showCode(code.join(" "));
+    }
+    
+    /**
+     * Displays the code in the editor part
+     * @param {Object} code
+     */
     var showCode = function(code){
-        if (!code) {
+        if (typeof(code) !== "string") {
             code = $("#code").val() || "";
         }
         try {
@@ -360,6 +372,7 @@ var TrialTool = (function(){
                             $("a.example-name").each(function(){
                                 if (unescape(selector) === $(this).html().replace(/^\s+|\s+$/g, '')) {
                                     selectExample(this);
+                                    showCodeWithDependencies();
                                 }
                             });
                         }
