@@ -74,7 +74,23 @@ var TrialTool = (function(){
      * @param {Object} code
      */
     var runCode = function(code){
-        TrialTool.executeInWindow(code, $("#console-iframe").get(0).contentWindow);
+        var consoleWindow = $("#console-iframe").get(0).contentWindow;
+        if (!consoleWindow.writeError) {
+            //console.log("consoleWindow is not defined, so will try again later", code);
+            window.setTimeout(function(){
+                runCode(code);
+            }, 1000);
+            return;
+        }
+        try {
+            if (!consoleWindow.eval && consoleWindow.execScript) {
+                consoleWindow.execScript("null");
+            }
+            consoleWindow.eval(code);
+        } 
+        catch (e) {
+            consoleWindow.writeError(e);
+        }
     }
     
     var visitedNodes = [];
@@ -410,17 +426,6 @@ var TrialTool = (function(){
         });
     });
     return {
-        executeInWindow: function(code, contentWindow){
-            try {
-                if (!contentWindow.eval && contentWindow.execScript) {
-                    contentWindow.execScript("null");
-                }
-                contentWindow.eval(code);
-            } 
-            catch (e) {
-                contentWindow.writeError(e);
-            }
-        },
         getCode: function(){
             return editor.getCode();
         }
