@@ -48,7 +48,7 @@ var TrialTool = (function(){
      */
     var selectExample = function(exampleNode){
         var example = $(exampleNode).parent();
-        showCode(example.children("script").html());
+        showCode(example.children("textarea.script").text());
         currentSelection = example;
         $("a.example-name-selected").removeClass("example-name-selected");
         $(exampleNode).addClass("example-name-selected");
@@ -127,7 +127,7 @@ var TrialTool = (function(){
                 "module": node.children("a.example-name").contents().filter(function(){
                     return this.nodeType == 3;
                 }).text(),
-                "code": node.children("script").html()
+                "code": node.children("textarea.script").text()
             });
         }
         //console.groupEnd();
@@ -248,6 +248,13 @@ var TrialTool = (function(){
                 "url": this,
                 "success": function(data){
                     $(parentNode).get(0).innerHTML = data.substring(data.indexOf("<body>") + 6, data.indexOf("</body>"));
+                    $(parentNode).find("script").each(function(){
+                        // replacing all the script nodes with text area
+                        $("<textarea>", {
+                            "class": "script"
+                        }).insertBefore(this).text($(this).html());
+                        $(this).remove();
+                    });
                     $(parentNode).find("*").hide();
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
                     
