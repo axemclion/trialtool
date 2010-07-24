@@ -31,6 +31,7 @@ var TrialTool = (function(){
                 break;
             case "run":
                 showDocs(false);
+                ConsoleProxy.helper("addHtml", [$("a.example-name-selected").siblings(".example-html").html()]);
                 ConsoleProxy.runCode(editor.getCode());
                 break;
             case "clearConsole":
@@ -101,7 +102,7 @@ var TrialTool = (function(){
                 }
             },
             helper: function(funcName, args){
-                if (!isReady("helper", funcName, args)) {
+                if (!isReady("helper", [funcName, args])) {
                     return;
                 }
                 if (typeof(consoleWindow.ConsoleHelper[funcName]) === "function") {
@@ -290,7 +291,8 @@ var TrialTool = (function(){
                         }).insertBefore(this).text($(this).html());
                         $(this).remove();
                     });
-                    $(parentNode).find("*").hide();
+                    $(parentNode).children("*").hide();
+					$(parentNode).find("ul>*, li.example-set>*, li.example>*").hide();
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
                     
                     // adding script and stylesheets that are in header to the console
@@ -313,7 +315,7 @@ var TrialTool = (function(){
                     
                     // Add styles using the tag
                     head.filter("link").each(function(){
-                        ConsoleProxy.helper("addHtml", ["<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>"]);
+                        ConsoleProxy.helper("addHtml", ["<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>", "head"]);
                     });
                     head.filter("style").each(function(){
                         ConsoleProxy.helper("addCss", [$(this).html()]);
