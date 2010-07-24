@@ -7,11 +7,11 @@
             
             var innerStyle = document.createElement("div");
             innerStyle.innerHTML = "Inner  Styles <span class = 'inner-style' >not</span> loaded";
-            document.body.appendChild(innerStyle);
+            document.getElementById("console").appendChild(innerStyle);
             
             var outerStyle = document.createElement("div");
             outerStyle.innerHTML = "Outer Styles <span class = 'outer-style' >not</span> loaded";
-            document.body.appendChild(outerStyle);
+            document.getElementById("console").appendChild(outerStyle);
         </script>
         <script src="../examples/externalRef.js" type="text/javascript">
         </script>
@@ -112,9 +112,13 @@
                     // This requires the entire Example 1 set to be run. 
                     // Hence, example 1.1 and example 1.2 should run so that variables are declared
                     document.write("Product of a and b is ", a * b);
-                    document.write("Example 3 executed");
+                    document.getElementById("Example3Div").innerHTML = "Example 3 excuted";
                 </script>
                 <link class = "example-docs" href="div#doc-example3"/>
+                <div class = "example-html">
+                    <div id = "Example3Div">
+                    </div>
+                </div>
             </li>
         </ul>
         <div>
