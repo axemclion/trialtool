@@ -53,6 +53,38 @@ var ConsoleHelper = (function(){
         write(e.name + ": " + e.message).style.color = "RED";
     }
     
+    
+    // Setting the properties for the global object
     document.write = window.write = write;
     window.writeError = writeError;
+    
+    return {
+        "write": write,
+        "writeError": writeError,
+        /**
+         * Adds HTML content to the specified parent, in the console
+         * @param {Object} htmlCode
+         * @param {Object} parent
+         */
+        "addHtml": function(htmlCode, parent){
+            if (!parent) {
+                parent = "div#console";
+            }
+            jQuery(parent).append(htmlCode);
+        },
+        /**
+         * Adds the CSS code to the console
+         * @param {Object} cssCode
+         */
+        "addCss": function(cssCode){
+            var style = document.createElement('style');
+            var rules = document.createTextNode(cssCode);
+            style.type = 'text/css';
+            if (style.styleSheet) 
+                style.styleSheet.cssText = rules.nodeValue;
+            else 
+                style.appendChild(rules);
+            document.getElementsByTagName('head')[0].appendChild(style);
+        }
+    }
 })();
