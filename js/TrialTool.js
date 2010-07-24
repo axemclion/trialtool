@@ -31,10 +31,10 @@ var TrialTool = (function(){
                 break;
             case "run":
                 showDocs(false);
-                runCode(editor.getCode());
+                ConsoleProxy.runCode(editor.getCode());
                 break;
             case "clearConsole":
-                runCode("document.getElementById('console').innerHTML = '';")
+                ConsoleProxy.runCode("document.getElementById('console').innerHTML = '';")
                 break;
             case "getDependencies":
                 showCodeWithDependencies();
@@ -73,25 +73,44 @@ var TrialTool = (function(){
      * Executes code in the context of the console
      * @param {Object} code
      */
-    var runCode = function(code){
+    var ConsoleProxy = (function ConsoleProxy(){
         var consoleWindow = $("#console-iframe").get(0).contentWindow;
-        if (!consoleWindow.writeError) {
-            //console.log("consoleWindow is not defined, so will try again later", code);
-            window.setTimeout(function(){
-                runCode(code);
-            }, 1000);
-            return;
-        }
-        try {
-            if (!consoleWindow.eval && consoleWindow.execScript) {
-                consoleWindow.execScript("null");
+        var isReady = function(funcName, args){
+            if (!consoleWindow.ConsoleHelper) {
+                //console.log("Not found, so will call", funcName, "later");
+                window.setTimeout(function(){
+                    result[funcName].apply(ConsoleProxy, args);
+                }, 1000);
             }
-            consoleWindow.eval(code);
-        } 
-        catch (e) {
-            consoleWindow.writeError(e);
+            return consoleWindow.ConsoleHelper;
+        };
+        
+        var result = {
+            runCode: function(code){
+                if (!isReady("runCode", arguments)) {
+                    return;
+                }
+                try {
+                    if (!consoleWindow.eval && consoleWindow.execScript) {
+                        consoleWindow.execScript("null");
+                    }
+                    consoleWindow.eval(code);
+                } 
+                catch (e) {
+                    consoleWindow.writeError(e);
+                }
+            },
+            helper: function(funcName, args){
+                if (!isReady("helper", funcName, args)) {
+                    return;
+                }
+                if (typeof(consoleWindow.ConsoleHelper[funcName]) === "function") {
+                    consoleWindow.ConsoleHelper[funcName].apply(consoleWindow.ConsoleHelper, args);
+                }
+            }
         }
-    }
+        return result;
+    })();
     
     var visitedNodes = [];
     var getDependencies = function(example){
@@ -275,44 +294,34 @@ var TrialTool = (function(){
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
                     
                     // adding script and stylesheets that are in header to the console
-                    head = $();
+                    var head = $();
                     try {
-                        head = $(data.substring(data.indexOf("<head>") + 6, data.indexOf("</head>")));
+                        var head = $(data.substring(data.indexOf("<head>") + 6, data.indexOf("</head>")) || "");
                     } 
                     catch (e) {
                         // This is required as head sometimes is empty and $(" ") is an error
                         //console.error(e);
                     }
                     head.filter("script").each(function(){
-                        if ($(this).attr("src")) {
-                            runCode("document.getElementsByTagName('head')[0].appendChild(document.createElement('script')).setAttribute('src','" + $(this).attr("src") + "');");
-                        }
-                        else {
-                            runCode($(this).html());
-                        }
+                        var html = ["<script type = 'text/javascript' "];
+                        $(this).attr("src") && html.push(" src = '" + $(this).attr("src") + "'")
+                        html.push(">");
+                        html.push($(this).html());
+                        html.push("</script>");
+                        ConsoleProxy.helper("addHtml", [html.join(""), "head"]);
                     });
                     
                     // Add styles using the tag
-                    var w = $("#console-iframe").get(0).contentWindow;
-                    head.filter("style").each(function(){
-                        var head = w.document.getElementsByTagName('head')[0];
-                        var style = w.document.createElement('style');
-                        var rules = w.document.createTextNode($(this).html());
-                        style.type = 'text/css';
-                        if (style.styleSheet) 
-                            style.styleSheet.cssText = rules.nodeValue;
-                        else 
-                            style.appendChild(rules);
-                        head.appendChild(style);
-                    });
                     head.filter("link").each(function(){
-                        runCode("var x = document.createElement('link'); x.setAttribute('rel','stylesheet');x.setAttribute('href','" + $(this).attr("href") + "');document.getElementsByTagName('head')[0].appendChild(x)");
+                        ConsoleProxy.helper("addHtml", ["<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>"]);
+                    });
+                    head.filter("style").each(function(){
+                        ConsoleProxy.helper("addCss", [$(this).html()]);
                     });
                     
                     // replace all links with actual examples
                     $(parentNode).find("li.example-link").each(function(){
                         loadExamples($(this).attr("href"), this);
-                        
                     });
                 },
                 "complete": function(xhr, status){
