@@ -67,7 +67,7 @@ var TrialTool = (function(){
         }
         $("div#docs *").show();
         var selector = $(exampleNode).parent().attr("id");
-        urlHelper.setKey("selected", (selector) ? ("#" + selector) : $(exampleNode).html().replace(/^\s+|\s+$/g, ''));
+        urlHelper.setKey("selected", (selector) ? ("#" + selector) : ($(exampleNode).html() || "").replace(/^\s+|\s+$/g, ''));
     }
     
     /**
@@ -292,7 +292,7 @@ var TrialTool = (function(){
                         $(this).remove();
                     });
                     $(parentNode).children("*").hide();
-					$(parentNode).find("ul>*, li.example-set>*, li.example>*").hide();
+                    $(parentNode).find("ul>*, li.example-set>*, li.example>*").hide();
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
                     
                     // adding script and stylesheets that are in header to the console
