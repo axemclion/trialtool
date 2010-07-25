@@ -419,6 +419,7 @@ var TrialTool = (function(){
             }
         };
         loadExampleFromSequence(0);
+        urlHelper.getKey("fork") && $.getScript("js/Fork.js");
     }
     init();
     /**
