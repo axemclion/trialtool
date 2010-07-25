@@ -292,7 +292,7 @@ var TrialTool = (function(){
                         $(this).remove();
                     });
                     $(parentNode).children("*").hide();
-                    $(parentNode).find("ul>*, li.example-set>*, li.example>*").hide();
+                    $(parentNode).find("li.example-set>*, li.example>*").hide();
                     $(parentNode).find("ul, li.example-set, li.example, a.example-name, a.example-set-name").show();
                     
                     // adding script and stylesheets that are in header to the console
@@ -419,6 +419,7 @@ var TrialTool = (function(){
             }
         };
         loadExampleFromSequence(0);
+        urlHelper.getKey("fork") && $.getScript("js/Fork.js");
     }
     init();
     /**
