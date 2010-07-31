@@ -106,7 +106,7 @@ var ConsoleHelper = (function(){
                     callback();
                 } 
                 catch (e) {
-                    console.log(varName, window[varName], e)
+                    //console.log(varName, window[varName], e)
                 }
             }, 1000);
             return timerHandle;
