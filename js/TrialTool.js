@@ -35,7 +35,7 @@ var TrialTool = (function(){
                 consoleProxy("runCode", [editor.getCode()]);
                 break;
             case "clearConsole":
-                consoleProxy("runCode", "document.getElementById('console').innerHTML = '';")
+                consoleProxy("runCode", ["document.getElementById('console').innerHTML = '';"]);
                 break;
             case "getDependencies":
                 showCodeWithDependencies();
