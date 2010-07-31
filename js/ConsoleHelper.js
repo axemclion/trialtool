@@ -85,6 +85,31 @@ var ConsoleHelper = (function(){
             else 
                 style.appendChild(rules);
             document.getElementsByTagName('head')[0].appendChild(style);
+        },
+        
+        runCode: function(src){
+            if (window.execScript) {
+                window.execScript(src);
+                return;
+            }
+            var fn = function(){
+                window.eval.call(window, src);
+            };
+            fn();
+        },
+        
+        "waitFor": function(varName, callback){
+            var timerHandle = window.setInterval(function(){
+                try {
+                    eval(varName);
+                    window.clearInterval(timerHandle);
+                    callback();
+                } 
+                catch (e) {
+                    console.log(varName, window[varName], e)
+                }
+            }, 1000);
+            return timerHandle;
         }
     }
 })();

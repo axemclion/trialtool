@@ -31,11 +31,11 @@ var TrialTool = (function(){
                 break;
             case "run":
                 showDocs(false);
-                ConsoleProxy.helper("addHtml", [$("a.example-name-selected").siblings(".example-html").html()]);
-                ConsoleProxy.runCode(editor.getCode());
+                consoleProxy("addHtml", [$("a.example-name-selected").siblings(".example-html").html()]);
+                consoleProxy("runCode", [editor.getCode()]);
                 break;
             case "clearConsole":
-                ConsoleProxy.runCode("document.getElementById('console').innerHTML = '';")
+                consoleProxy("runCode", "document.getElementById('console').innerHTML = '';")
                 break;
             case "getDependencies":
                 showCodeWithDependencies();
@@ -74,40 +74,24 @@ var TrialTool = (function(){
      * Executes code in the context of the console
      * @param {Object} code
      */
-    var ConsoleProxy = (function ConsoleProxy(){
+    var consoleProxy = (function consoleProxy(){
         var consoleWindow = $("#console-iframe").get(0).contentWindow;
         var isReady = function(funcName, args){
             if (!consoleWindow.ConsoleHelper) {
                 //console.log("Not found, so will call", funcName, "later");
                 window.setTimeout(function(){
-                    result[funcName].apply(ConsoleProxy, args);
+                    result[funcName].apply(consoleProxy, args);
                 }, 1000);
             }
             return consoleWindow.ConsoleHelper;
         };
         
-        var result = {
-            runCode: function(code){
-                if (!isReady("runCode", arguments)) {
-                    return;
-                }
-                try {
-                    if (!consoleWindow.eval && consoleWindow.execScript) {
-                        consoleWindow.execScript("null");
-                    }
-                    consoleWindow.eval(code);
-                } 
-                catch (e) {
-                    consoleWindow.writeError(e);
-                }
-            },
-            helper: function(funcName, args){
-                if (!isReady("helper", [funcName, args])) {
-                    return;
-                }
-                if (typeof(consoleWindow.ConsoleHelper[funcName]) === "function") {
-                    consoleWindow.ConsoleHelper[funcName].apply(consoleWindow.ConsoleHelper, args);
-                }
+        var result = function(funcName, args){
+            if (!isReady("helper", [funcName, args])) {
+                return;
+            }
+            if (typeof(consoleWindow.ConsoleHelper[funcName]) === "function") {
+                consoleWindow.ConsoleHelper[funcName].apply(consoleWindow.ConsoleHelper, args);
             }
         }
         return result;
@@ -310,15 +294,15 @@ var TrialTool = (function(){
                         html.push(">");
                         html.push($(this).html());
                         html.push("</script>");
-                        ConsoleProxy.helper("addHtml", [html.join(""), "head"]);
+                        consoleProxy("addHtml", [html.join(""), "head"]);
                     });
                     
                     // Add styles using the tag
                     head.filter("link").each(function(){
-                        ConsoleProxy.helper("addHtml", ["<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>", "head"]);
+                        consoleProxy("addHtml", ["<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>", "head"]);
                     });
                     head.filter("style").each(function(){
-                        ConsoleProxy.helper("addCss", [$(this).html()]);
+                        consoleProxy("addCss", [$(this).html()]);
                     });
                     
                     // replace all links with actual examples
@@ -387,6 +371,15 @@ var TrialTool = (function(){
     var init = function(){
         // Loading the examples from 
         var exampleLoadSequence = [urlHelper.getKey("example"), ["examples/default.html"], ["examples/Template.html"]];
+        
+        var fork = function(){
+            if (urlHelper.getKey("fork")) {
+                $.getScript("js/Fork.js");
+                fork = function(){
+                }
+            }
+        }
+        
         var loadExampleFromSequence = function(i){
             if (i >= exampleLoadSequence.length) {
                 return;
@@ -415,11 +408,11 @@ var TrialTool = (function(){
             });
             if (i >= exampleLoadSequence.length - 1) {
                 urlHelper.setKey("fork", true);
-                urlHelper.getKey("fork") && $.getScript("js/Fork.js");
+                fork();
             }
         };
         loadExampleFromSequence(0);
-        urlHelper.getKey("fork") && $.getScript("js/Fork.js");
+        fork();
     }
     init();
     /**
