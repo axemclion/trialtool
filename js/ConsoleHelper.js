@@ -88,14 +88,19 @@ var ConsoleHelper = (function(){
         },
         
         runCode: function(src){
-            if (window.execScript) {
-                window.execScript(src);
-                return;
+            try {
+                if (window.execScript) {
+                    window.execScript(src);
+                    return;
+                }
+                var fn = function(){
+                    window.eval.call(window, src);
+                };
+                fn();
+            } 
+            catch (e) {
+                writeError(e);
             }
-            var fn = function(){
-                window.eval.call(window, src);
-            };
-            fn();
         },
         
         "waitFor": function(varName, callback){
