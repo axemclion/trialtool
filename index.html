@@ -26,79 +26,116 @@
             </div>
         </div>
         <div id = "content" class = "clear">
-            <div id = "top-pane">
-                <div id = "examples">
-                    <div id = "examples-title">
-                        Examples 
-                    </div>
-                    <div id = "example-sets" class = "example-set">
-                    </div>
+        <div id = "top-pane">
+            <div id = "examples">
+                <div id = "examples-title">
+                    Examples 
                 </div>
-                <div id = "vertical-thumb">
-                </div>
-                <div id= "code-area">
-                    <div id = "formattedCode" class = "prettyprint">
-                    </div>
-                    <textarea border = "0" id = "code">
-                        /***************************************\
-                        | Select a module from the Examples list|
-                        \***************************************/
-                        //This is the code area//
-                        // Code editor from the awesome code mirror - http://marijn.haverbeke.nl/codemirror/
-                    </textarea>
-                </div>
-                <div class = "clear">
+                <div id = "example-sets" class = "example-set">
                 </div>
             </div>
-            <div id = "horizontal-thumb">
+            <div id = "vertical-thumb">
             </div>
-            <div id = "console" class = "clear">
-                <ul id = "console-toolbar">
-                    <li class = "tab">
-                        <a id = "viewdocs" style ="background-image : url('images/reference.png');"></a>
-                    </li>
-                    <li class = "tab">
-                        <a id = "viewoutput" style ="background-image : url('images/output.png');"></a>
-                    </li>
-                </ul>
-                <div id = "console-content">
-                    <iframe frameBorder = 0 src = "html/console.html" id = "console-iframe">
-                    </iframe>
-                    <div id = "docs">
-                        <div>
-                            <h2>Using this tool</h2>
+            <div id= "code-area">
+                <div id = "formattedCode" class = "prettyprint">
+                </div>
+                <textarea border = "0" id = "code">
+                    /* 
+                       
+                      
+                     _______   _       _ _______          _  
+                    |__   __| (_)     | |__   __|        | | 
+                       | |_ __ _  __ _| |  | | ___   ___ | |  
+                       | | '__| |/ _` | |  | |/ _ \ / _ \| | 
+                       | | |  | | (_| | |  | | (_) | (_) | |  
+                       |_|_|  |_|\__,_|_|  |_|\___/ \___/|_| 
+                        
+                     Select a module from the Examples list 
+                       on the left to load the code here. 
+                     
+                     
+                    */
+                </textarea>
+            </div>
+            <div class = "clear">
+            </div>
+        </div>
+        <div id = "horizontal-thumb">
+        </div>
+        <div id = "console" class = "clear">
+            <ul id = "console-toolbar">
+                <li class = "tab">
+                    <a id = "viewdocs" style ="background-image : url('images/reference.png');"></a>
+                </li>
+                <li class = "tab">
+                    <a id = "viewoutput" style ="background-image : url('images/output.png');"></a>
+                </li>
+            </ul>
+            <div id = "console-content">
+                <iframe frameBorder = 0 src = "html/console.html" id = "console-iframe">
+                </iframe>
+                <div id = "docs">
+                    <div style ="text-align:center; float : right; margin: 0.5em;">
+                        <object width="500" height="405">
+                            <param name="movie" value="http://www.youtube.com/v/_I4XxKrNZDI&amp;hl=en_US&amp;fs=1?rel=0&amp;hd=1&amp;border=1">
+                            </param><param name="allowFullScreen" value="true">
+                            </param><param name="allowscriptaccess" value="always">
+                            </param>
+                            <embed src="http://www.youtube.com/v/_I4XxKrNZDI&amp;hl=en_US&amp;fs=1?rel=0&amp;hd=1&amp;border=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="500" height="405">
+                            </embed>
+                        </object>
+                    </div>
+                    <div style ="line-height:1.3em;">
+                        <h2>Using this tool</h2>
+                        <p>
                             This tool showcases the capabilities of various API and libraries. 
                             You can load example snippets, modify them and run it to see the results right here. 
                             <br/>
-                            <h5>The toolbar buttons</h5>
-                            <ul>
-                                <li>
-                                    <b>Run Snippet : </b>
-                                    This button runs the code that is in the code area at the top right. The code area is editable and you can modify the examples and run them.
-                                </li>
-                                <li>
-                                    <b>Load Pre-requisites : </b>
-                                    Some snippets require of other snippets to be run. This button adds those dependencies in the code area. 
-                                </li>
-                                <li>
-                                    <b>Clear Console</b>Clears the output window
-                                </li>
-                            </ul>
-                            <p>
-                                If you are an API developer and want to use this tool to showcase your libraries, you can use this tool. The examples loaded are configrable. 
-                            </p>
-                        </div>
+                            The video to show how to use the tool. 
+                            You can also <a href = 'http://www.youtube.com/watch?v=_I4XxKrNZDI&fmt=22'>view it in High defination</a>. 
+                            If you are an API developer and want to use this tool to showcase your libraries, you can use this tool. The <a href = "http://blog.nparashuram.com/2010/07/trialtool-example-file-format.html">examples</a>
+                            loaded are configrable. 
+                        </p>
+                        <h3>Credits</h3>
+                        This tool was developed by <a href = "http://nparashuram.com">Parashuram</a>
+                        and you can fork the project from <a href = "http://github.com/axemclion/trialtool">github</a>.
+                        Updates for the project can be found on the <a href = "http://blog.nparashuram.com/search/labels/trialtool">blog</a>.
+                        <br/>
+                        This is available under the <a href = "http://www.apache.org/licenses/LICENSE-2.0">Apache License</a>
+                        and is free for all use as long as you give credit to the creators and contributors.
+                        <br/>
+                        Trial tool uses <a href="http://jquery.com/">Jquery</a>, <a href = "http://codemirror.net/">Code Mirror</a>, <a href = "http://wiki.github.com/akzhan/jwysiwyg/">Jwysiwyg</a>
+                        and <a href = "http://www.downloadify.info/">Downloadify</a>.
+                        <br/>
+                        <br/>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id = "footer">
-        </div>
-        <script src="lib/jquery/jquery-1.4.2.min.js" type="text/javascript">
+            </div>
+            <div id = "footer">
+            </div>
+            <script src="lib/jquery/jquery-1.4.2.min.js" type="text/javascript">
+            </script>
+            <script src="lib/jquery/jquery-ui-1.8.2.custom.min.js" type="text/javascript">
+            </script>
+            <script src="js/TrialTool.js" type="text/javascript">
+            </script>
+        </body>
+        <!-- Google Analytics -->
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-617499-9']);
+            _gaq.push(['_setDomainName', 'none']);
+            _gaq.push(['_setAllowLinker', true]);
+            _gaq.push(['_trackPageview']);
+            
+            (function(){
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
         </script>
-        <script src="lib/jquery/jquery-ui-1.8.2.custom.min.js" type="text/javascript">
-        </script>
-        <script src="js/TrialTool.js" type=text/javascript>
-        </script>
-    </body>
-</html>
+    </html>
