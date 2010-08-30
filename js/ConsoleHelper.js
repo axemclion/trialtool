@@ -21,19 +21,20 @@ var ConsoleHelper = (function(){
             }
             result.push("</ol></span>");
         }
-        else if (typeof(data) === "object") {
-            result = ["<span class = 'log-object'>&nbsp;<u>[Object]</u>&nbsp;"];
-            result.push("<ul style = 'display:none'>");
-            for (x in data) {
-                result.push("<li>" + x);
-                result.push(":" + getDomFromJSON(data[x]));
-                result.push("</li>")
+        else 
+            if (typeof(data) === "object") {
+                result = ["<span class = 'log-object'>&nbsp;<u>[Object]</u>&nbsp;"];
+                result.push("<ul style = 'display:none'>");
+                for (x in data) {
+                    result.push("<li>" + x);
+                    result.push(":" + getDomFromJSON(data[x]));
+                    result.push("</li>")
+                }
+                result.push("</ul></span>");
             }
-            result.push("</ul></span>");
-        }
-        else {
-            result = ["<span class = 'log-item'>", String(data).replace(/</g, "&lt;").replace(/>/g, "&gt;"), "</span>"];
-        }
+            else {
+                result = ["<span class = 'log-item'>", String(data).replace(/</g, "&lt;").replace(/>/g, "&gt;"), "</span>"];
+            }
         return result.join("");
     }
     
@@ -43,6 +44,7 @@ var ConsoleHelper = (function(){
         for (var i = 0; i < arguments.length; i++) {
             msg.push(getDomFromJSON(arguments[i]));
         }
+        text.className = "log";
         text.innerHTML = ["<span class='log-time'>[", new Date().toLocaleTimeString(), "]&nbsp;</span>"].join("") + msg.join(" ");
         document.getElementById("console").appendChild(text);
         window.scroll(0, $("#console").height());
