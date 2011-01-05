@@ -80,7 +80,8 @@ var TrialTool = (function(){
             if (!consoleWindow.ConsoleHelper) {
                 //console.log("Not found, so will call", funcName, "later");
                 window.setTimeout(function(){
-                    result[funcName].apply(consoleProxy, args);
+                	if (typeof result[funcName] === "function")
+                		result[funcName].apply(consoleProxy, args);
                 }, 1000);
             }
             return consoleWindow.ConsoleHelper;
