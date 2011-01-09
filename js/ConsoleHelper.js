@@ -11,8 +11,7 @@ var ConsoleHelper = (function() {
 	var getDomFromJSON = function(data) {
 		var result = [];
 		if (Object.prototype.toString.apply(data) === '[object Array]') {
-			result = [ "<span class = 'log-array'>&nbsp;<u>[Array : ",
-					data.length, "]</u>&nbsp;" ];
+			result = [ "<span class = 'log-array'>&nbsp;<u>[Array : ", data.length, "]</u>&nbsp;" ];
 			result.push("<ol start = 0 style = 'display:none'>");
 			for ( var i = 0; i < data.length; i++) {
 				result.push("<li>");
@@ -30,9 +29,7 @@ var ConsoleHelper = (function() {
 			}
 			result.push("</ul></span>");
 		} else {
-			result = [ "<span class = 'log-item'>",
-					String(data).replace(/</g, "&lt;").replace(/>/g, "&gt;"),
-					"</span>" ];
+			result = [ "<span class = 'log-item'>", String(data).replace(/</g, "&lt;").replace(/>/g, "&gt;"), "</span>" ];
 		}
 		return result.join("");
 	}
@@ -44,9 +41,7 @@ var ConsoleHelper = (function() {
 			msg.push(getDomFromJSON(arguments[i]));
 		}
 		text.className = "log";
-		text.innerHTML = [ "<span class='log-time'>[",
-				new Date().toLocaleTimeString(), "]&nbsp;</span>" ].join("")
-				+ msg.join(" ");
+		text.innerHTML = [ "<span class='log-time'>[", new Date().toLocaleTimeString(), "]&nbsp;</span>" ].join("") + msg.join(" ");
 		document.getElementById("console").appendChild(text);
 		window.scroll(0, $("#console").height());
 		return text;
@@ -111,23 +106,25 @@ var ConsoleHelper = (function() {
 
 		"waitFor" : function(varName, callback) {
 			var count = 0;
-			var timerHandle = window
-					.setInterval(
-							function() {
-								try {
-									if (!eval(varName)) {
-										throw varName + "not defined";
-									}
-									window.clearInterval(timerHandle);
-									callback();
-								} catch (e) {
-									if (count === 3)
-										write(varName
-												+ " not defined yet. You may have to run the pre-requisites first.");
-									count++;
-									// console.log(varName, window[varName], e)
-								}
-							}, 1000);
+			var timerHandle = window.setInterval(function() {
+				try {
+					if (!eval(varName)) {
+						throw varName + "not defined";
+					}
+					window.clearInterval(timerHandle);
+					callback();
+				} catch (e) {
+					if (count === 3)
+						write(varName, "not defined yet. You may have to run the pre-requisites for this example first.");
+					else if (count > 10) {
+						write(varName, "still not defined even after 10 seconds, so aborting operation");
+						write(callback)
+						window.clearInterval(timerHandle);
+					}
+					count++;
+					// console.log(varName, window[varName], e)
+				}
+			}, 1000);
 			return timerHandle;
 		}
 	}
