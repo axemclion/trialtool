@@ -117,7 +117,7 @@ var ConsoleHelper = (function() {
 					if (count === 3)
 						write(varName, "not defined yet. You may have to run the pre-requisites for this example first.");
 					else if (count > 10) {
-						write(varName, "still not defined even after 10 seconds, so aborting operation");
+						write(varName, "not defined even after 10 seconds, so aborting operation");
 						write(callback)
 						window.clearInterval(timerHandle);
 					}
