@@ -21,6 +21,11 @@ var TrialTool = (function() {
 		e.preventDefault();
 	});
 
+	$("#splashClose").click(function() {
+		$("#splash").fadeOut();
+		return false;
+	});
+
 	$("ul#toolbar>li>a, #console-toolbar>li>a").live("click", function(e) {
 		e.preventDefault();
 		switch ($(this).attr("id")) {
@@ -67,6 +72,7 @@ var TrialTool = (function() {
 			$("div#docs").html("No documentation provided");
 		}
 		$("div#docs *").show();
+		$("#splash").hide();
 		var selector = $(exampleNode).parent().attr("id");
 		urlHelper.setKey("selected", (selector) ? ("#" + selector) : ($(exampleNode).html() || "").replace(/^\s+|\s+$/g, ''));
 	}
@@ -311,11 +317,9 @@ var TrialTool = (function() {
 					});
 
 					// Add styles using the tag
-					head.filter("link").each(
-							function() {
-								consoleProxy("addHtml", [
-										"<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>", "head" ]);
-							});
+					head.filter("link").each(function() {
+						consoleProxy("addHtml", [ "<link rel = 'stylesheet' href = '" + $(this).attr("href") + "' type = 'text/css'/>", "head" ]);
+					});
 					head.filter("style").each(function() {
 						consoleProxy("addCss", [ $(this).html() ]);
 					});
@@ -324,6 +328,14 @@ var TrialTool = (function() {
 					$(parentNode).find("li.example-link").each(function() {
 						loadExamples($(this).attr("href"), this);
 					});
+
+					// show the splash page
+					var content = $(parentNode).find(".splash").html();
+					if (content) {
+						$("#splashContent").html(content);
+						$("#splash").fadeIn();
+					}
+
 				},
 				"complete" : function(xhr, status) {
 					(status === "error") && (errorCount++);

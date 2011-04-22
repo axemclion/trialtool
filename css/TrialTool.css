@@ -259,3 +259,29 @@ iframe#console-iframe {
 .clear {
     clear: both;
 }
+
+#splash {
+    position: absolute;
+    background: white;
+    border: SOLID 1px BLACK;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    height: 60%;
+    opacity: 0.95;
+    box-shadow: 5px 5px 10px GRAY;
+    z-index: 99999;
+    display: none;
+}
+
+#splash #splashClose {
+    text-decoration: none;
+    background: WHITE;
+    text-align: right;
+    float: right;
+    margin: 0 0.5em 0 0;
+}
+
+#splash #splashContent {
+    padding: 2%;
+}
