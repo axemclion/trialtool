@@ -1,5 +1,6 @@
 var ConsoleHelper = (function() {
-	$("span.log-object, span.log-array").live("click", function() {
+	$("span.log-object, span.log-array").live("click", function(e) {
+		e.stopPropagation();
 		$(this).children("ul, ol").toggle();
 		if ($(this).children("ul, ol").css("display") !== "none") {
 			$(this).addClass("log-opened");
@@ -48,7 +49,10 @@ var ConsoleHelper = (function() {
 	};
 
 	var writeError = function(e) {
-		write(e.name + ": " + e.message).style.color = "RED";
+		if (e && e.name && e.message) {
+			e = e.name + ":" + e.message;
+		}
+		write(e).style.color = "RED";
 	}
 
 	// Setting the properties for the global object
