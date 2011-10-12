@@ -2,14 +2,17 @@
 <html>
     <head>
         <title>Trial Tool</title>
+		<link rel="shortcut icon" href="images/trialtool.png" type="image/png" />
+		<link rel="apple-touch-icon" href="images/trialtool.png" />
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/themes/base/jquery-ui.css" type="text/css" media="all" />
         <link rel="stylesheet" type="text/css" href="lib/codemirror/css/docs.css"/>
         <link rel="stylesheet" type="text/css" href="css/TrialTool.css"/>
     </head>
     <body>
         <div id = "header">
-            <div style ="float:left; line-height : 1.5em; font-size : 2em;margin : 0 0 0 1em; color : WHITE; font-family : Garamond; font-style :italic; font-weight : bolder;">
-                Trial Tool
+            <div style ="float:left; line-height : 1.5em; font-size : 2em;margin : 0; color : WHITE; font-family : Garamond; font-style :italic; font-weight : bolder;">
+                <img src = "images/trialtool.png" style = "height : 1em; vertical-align : middle">
+				<span>Trial Tool</span>
             </div>
             <ul id = "toolbar" class = "toolbar">
                 <li>
@@ -28,7 +31,7 @@
         <div id = "splash">
             <a href = "#" id= "splashClose">x</a>
             <div id = "splashContent">
-                Trial Tool
+                <span>Trial Tool</span>
             </div>
         </div>
         <div id = "content" class = "clear">
@@ -81,13 +84,14 @@
                 <iframe frameBorder = 0 src = "html/console.html" id = "console-iframe">
                 </iframe>
                 <div id = "docs">
-                    <div style ="text-align:center; float : right; margin: 0.5em;">
+                    <div style ="text-align:center; float : right; margin: 0.5em; z-index : -100">
                         <object width="500" height="405">
                             <param name="movie" value="http://www.youtube.com/v/_I4XxKrNZDI&amp;hl=en_US&amp;fs=1?rel=0&amp;hd=1&amp;border=1">
                             </param><param name="allowFullScreen" value="true">
                             </param><param name="allowscriptaccess" value="always">
+							</param><param name="wmode" value="opaque">
                             </param>
-                            <embed src="http://www.youtube.com/v/_I4XxKrNZDI&amp;hl=en_US&amp;fs=1?rel=0&amp;hd=1&amp;border=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="500" height="405">
+                            <embed src="http://www.youtube.com/v/_I4XxKrNZDI&amp;hl=en_US&amp;fs=1?rel=0&amp;hd=1&amp;border=1" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode=opaque width="500" height="405">
                             </embed>
                         </object>
                     </div>
