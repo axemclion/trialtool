@@ -24,10 +24,7 @@
     </head>
     <body>
         <div class = "splash">
-            <h1>
-            	<img src = "images/trialtool.png" style = "vertical-align:middle; height : 1.5em">
-            	Trial Tool
-			</h1>
+            <h1><img src = "images/trialtool.png" style ="vertical-align:middle; height : 1.5em">Trial Tool</h1>
             <p>
                 TrialTool is an API viewer that lets you see the functionality of examples by category, modify them and execute them inline to see the results. 
                 You can also create your own examples using the "fork" option in the URL parameter. 
@@ -61,16 +58,39 @@
                             // Click on the "Load Pre-requisites" button at the top to load code for example 1 also
                             var b = 20;
                             var c = {
-                                "a": 10,
-                                "b": {
-                                    "a": 20,
-                                    "b": 30
-                                },
-                                "c": [10, 20, 30]
+                            	"a": 10,
+                            	"b": {
+                            		"a": 20,
+                            		"b": 30
+                            	},
+                            	"c": [10, 20, 30]
                             };
                             document.write("Sum of a and b is ", a + b);
                             document.write("JSON - ", c, c.b, c.c);
                             document.write("Executed example 1.2");
+                        </script>
+                    </li>
+                    <li class = "example" id = "example1-3">
+                        <a class = "example-name">Example 1.3</a>
+                        <link class = "example-docs" href = "div#doc-example1-3">
+                        <script type="text/javascript">
+                            // A callback function is required, that is defined in Example 1-4
+                            var count = 0;
+                            var timerHandle = window.setInterval(function(){
+                            	/* CODE FOR ${operation} */
+                            	count = count + 1 || 0;
+                            	if (count > 3 && timerHandle) {
+                            		window.clearInterval(timerHandle);
+                            	}
+                            }, 1000);
+                        </script>
+                    </li>
+                    <li class = "example" id = "example1-4" depends = "example1-3" insertAt = "operation">
+                        <a class = "example-name">Example 1.4</a>
+                        <link class = "example-docs" href = "div#doc-example1-3">
+                        <script type="text/javascript">
+                            // This Operation simply prints timeout completed, but can be inserted at a place where a setTimeout function is acutally called 
+                            document.write("Interval hit " + count + " time");
                         </script>
                     </li>
                     <li class = "example-link example-set" href = "examples/linkedExample.html">
@@ -89,12 +109,12 @@
                         </div>
                         <script type="text/javascript">
                             var x = {
-                                "a": 10,
-                                "b": 20,
-                                "c": [10, 20]
+                            	"a": 10,
+                            	"b": 20,
+                            	"c": [10, 20]
                             };
                             var y = [10, 20, {
-                                "a": 10
+                            	"a": 10
                             }];
                             document.write("X is ", x, "and Y is ", y);
                             document.write("Executed example 2.1");
