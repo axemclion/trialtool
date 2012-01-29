@@ -420,6 +420,7 @@ var TrialTool = (function(){
 			}
 			loadExamples(exampleLoadSequence[i], "div#example-sets", function(hasFailed){
 				if (hasFailed) {
+					alert("Could not load the specified example - " + exampleLoadSequence[i]);
 					loadExampleFromSequence(i + 1);
 				} else {
 					window.setTimeout(function(){
