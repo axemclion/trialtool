@@ -345,6 +345,9 @@ var TrialTool = (function(){
 					}
 					
 				},
+				"error" : function(data){
+					$("#docs").html(data.responseText);
+				},
 				"complete": function(xhr, status){
 					(status === "error") && (errorCount++);
 					remainingUrls--;
