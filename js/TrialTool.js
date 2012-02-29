@@ -47,6 +47,9 @@ var TrialTool = (function(){
 				showCodeWithDependencies();
 				break;
 		}
+		
+		window._gaq = window._gaq || [];
+		window._gaq.push(['_trackEvent', document.location.href, "Toolbar Button", $(this).attr("id")]);
 	});
 	
 	/**
@@ -75,6 +78,10 @@ var TrialTool = (function(){
 		$("#splash").hide();
 		var selector = $(exampleNode).parent().attr("id");
 		urlHelper.setKey("selected", (selector) ? ("#" + selector) : ($(exampleNode).html() || "").replace(/^\s+|\s+$/g, ''));
+		
+		// GA event
+		window._gaq = window._gaq || [];
+		window._gaq.push(['_trackEvent', document.location.href, "Select Example", exampleNode.innerHTML]);
 	}
 	
 	/**
@@ -349,6 +356,8 @@ var TrialTool = (function(){
 					$("#docs").html(data.responseText);
 				},
 				"complete": function(xhr, status){
+				 	window._gaq = window._gaq || [];
+					window._gaq.push(["_trackPageview", urls[urls.length  - remainingUrls]]);
 					(status === "error") && (errorCount++);
 					remainingUrls--;
 					if (!remainingUrls && typeof(callback) === "function") {
