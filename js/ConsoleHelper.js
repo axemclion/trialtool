@@ -16,7 +16,12 @@ var ConsoleHelper = (function() {
 			result.push("<ol start = 0 style = 'display:none'>");
 			for ( var i = 0; i < data.length; i++) {
 				result.push("<li>");
-				result.push(getDomFromJSON(data[i]));
+				try{
+					result.push(getDomFromJSON(data[i]));
+				}
+				catch(e){
+					result.push("unknown");
+				}
 				result.push("</li>")
 			}
 			result.push("</ol></span>");
@@ -25,7 +30,12 @@ var ConsoleHelper = (function() {
 			result.push("<ul style = 'display:none'>");
 			for (x in data) {
 				result.push("<li>" + x);
-				result.push(":" + getDomFromJSON(data[x]));
+				try{
+					result.push(":" + getDomFromJSON(data[x]));
+				} 
+				catch(e) {
+					result.push(x);
+				}
 				result.push("</li>")
 			}
 			result.push("</ul></span>");
