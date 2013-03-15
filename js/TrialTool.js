@@ -71,6 +71,12 @@ var TrialTool = (function(){
 			} else {
 				$("div#docs").html(docs.html());
 			}
+			$("div#docs iframe").each(function(){
+				var $this = $(this);
+				if ($this.data("src")){
+					$this.attr("src", $this.data("src"));
+				}
+			});
 		} else {
 			$("div#docs").html("No documentation provided");
 		}
